@@ -8,6 +8,9 @@
 namespace app\sign\controller;
 
 //这两个控制器是我本来就有的这里就不做演示  可以不继承 这个控制器用到的东西 不依靠外面的东西
+use Gaoming13\WechatPhpSdk\Api;
+use Gaoming13\WechatPhpSdk\Wechat;
+
 /**
  * 与微信公众平台握手
  */
