@@ -24,11 +24,11 @@ class Index extends Controller {
         );
 
         // 开发者中心-配置项-AppID(应用ID)
-        $appId = 'wx733d7f24bd29224a';
+        $appId = 'wxd92439ed67f18c2a';
         // 开发者中心-配置项-AppSecret(应用密钥)
-        $appSecret = 'c6d165c5785226806f42440e376a410e';
+        $appSecret = '711da457037ce5073af0689dd3ba8dbd';
         // 开发者中心-配置项-服务器配置-Token(令牌)
-        $token = 'gaoming13';
+        $token = 'jdwechatapp';
         // 开发者中心-配置项-服务器配置-EncodingAESKey(消息加解密密钥)
         $encodingAESKey = '072vHYArTp33eFwznlSvTRvuyOTe5YME1vxSoyZbzaV';
 

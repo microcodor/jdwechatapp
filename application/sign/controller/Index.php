@@ -9,11 +9,11 @@ namespace app\sign\controller;
 
 //这两个控制器是我本来就有的这里就不做演示  可以不继承 这个控制器用到的东西 不依靠外面的东西
 /**
- * 首页
+ * 与微信公众平台握手
  */
-define("TOKEN", "");//定义你公众号自己设置的token
-define("APPID", "");//填写你微信公众号的appid 千万要一致啊
-define("APPSECRET", "");//填写你微信公众号的appsecret  千万要记得保存 以后要看的话就只有还原了  保存起来 有益无害
+define("TOKEN", "jdwechatapp");//定义你公众号自己设置的token
+define("APPID", "wxd92439ed67f18c2a");//填写你微信公众号的appid 千万要一致啊
+define("APPSECRET", "711da457037ce5073af0689dd3ba8dbd");//填写你微信公众号的appsecret  千万要记得保存 以后要看的话就只有还原了  保存起来 有益无害
 class Index
 {
     //判断是介入还是用户  只有第一次介入的时候才会返回echostr
