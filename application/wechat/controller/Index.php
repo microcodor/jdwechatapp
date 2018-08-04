@@ -7,6 +7,7 @@
  */
 namespace app\wechat\controller;
 
+require '../../../../autoload.php';
 use Gaoming13\WechatPhpSdk\Api;
 use Gaoming13\WechatPhpSdk\Wechat;
 use think\Controller;
