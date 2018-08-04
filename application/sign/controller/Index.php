@@ -20,12 +20,18 @@ class Index
     function index()
     {
         //这个echostr呢  只有说验证的时候才会echo  如果是验证过之后这个echostr是不存在的字段了
-        $echoStr = $_GET["echostr"];
-        if ($this->checkSignature()) {
-            echo $echoStr;
-            //如果你不知道是否验证成功  你可以先echo echostr 然后再写一个东西
-            exit;
+        //$echoStr = $_GET["echostr"];
+        if (!isset($_GET['echostr'])) { //echostr不存在的话去执行wechatObj类中的responseMsg函数
+            $this->responseMsg();
+        }else{
+            $echoStr = $_GET["echostr"];
+            if ($this->checkSignature()) {
+                echo $echoStr;
+                //如果你不知道是否验证成功  你可以先echo echostr 然后再写一个东西
+                exit;
+            }
         }
+
     }//index end
     //验证微信开发者模式接入是否成功
     private function checkSignature()
@@ -37,7 +43,7 @@ class Index
         //微信传过来的值  什么用我不知道...
         $nonce     = $_GET["nonce"];
         //定义你在微信公众号开发者模式里面定义的token
-        $token  = "jdwechatapp";
+        $token  = TOKEN;
         //三个变量 按照字典排序 形成一个数组
         $tmpArr = array(
             $token,
@@ -56,6 +62,63 @@ class Index
             return false;
         }
     }// checkSignature end
+
+    private function responseMsg(){
+        // 这是使用了Memcached来保存access_token
+        array(
+            'type'=>'memcached',
+            'host'=>'localhost',
+            'port'=>'11211',
+            'prefix'=>'think',
+            'expire'=>0
+        );
+
+        // 开发者中心-配置项-AppID(应用ID)
+        $appId = APPID;
+        // 开发者中心-配置项-AppSecret(应用密钥)
+        $appSecret = APPSECRET;
+        // 开发者中心-配置项-服务器配置-Token(令牌)
+        $token = TOKEN;
+        // 开发者中心-配置项-服务器配置-EncodingAESKey(消息加解密密钥)
+        $encodingAESKey = '072vHYArTp33eFwznlSvTRvuyOTe5YME1vxSoyZbzaV';
+
+        // wechat模块 - 处理用户发送的消息和回复消息
+
+        $wechat = new Wechat(array(
+            'appId' => $appId,
+            'token' => 	$token,
+            'encodingAESKey' =>	$encodingAESKey //可选
+        ));
+        // api模块 - 包含各种系统主动发起的功能
+        $api = new Api(
+            array(
+                'appId' => $appId,
+                'appSecret'	=> $appSecret,
+                'get_access_token' => function(){
+                    // 用户需要自己实现access_token的返回
+                    return 'wechat_token';
+                },
+                'save_access_token' => function($token) {
+                    // 用户需要自己实现access_token的保存
+                    echo 'wechat_token', $token;
+                }
+            )
+        );
+
+        // 获取微信消息
+        $msg = $wechat->serve();
+
+        // 回复文本消息
+        if ($msg->MsgType == 'text' && $msg->Content == '你好') {
+            $wechat->reply("你也好！ - 这是我回复的额！");
+        } else {
+            $wechat->reply("听不懂！ - 这是我回复的额！");
+        }
+
+        // 主动发送
+        $api->send($msg->FromUserName, '这是我主动发送的一条消息');
+    }
+
     //构建一个发送请求的curl方法  微信的东西都是用这个 直接百度
     function https_request($url, $data = null)
     {
