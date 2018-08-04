@@ -37,7 +37,7 @@ class Index
         //微信传过来的值  什么用我不知道...
         $nonce     = $_GET["nonce"];
         //定义你在微信公众号开发者模式里面定义的token
-        $token  = "xiaochen";
+        $token  = "jdwechatapp";
         //三个变量 按照字典排序 形成一个数组
         $tmpArr = array(
             $token,
