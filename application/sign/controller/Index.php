@@ -14,6 +14,8 @@ namespace app\sign\controller;
 
 //Loader::import('Gaoming13\WechatPhpSdk\Api', EXTEND_PATH);
 //Loader::import('Gaoming13\WechatPhpSdk\Wechat', EXTEND_PATH);
+use think\Cache;
+
 /**
  * 与微信公众平台握手
  */
@@ -33,6 +35,146 @@ class Index
         }
 
     }//index end
+    // 创建菜单，根据微信api传入菜单json
+    //http://localhost/jdwechatapp/index.php/sign/index/create_menu
+    public function create_menu() {
+        $menu_json = '{
+	    "button":[
+	    {
+				"name":"阅读文章",
+				"sub_button":[
+					{
+						"type":"click",
+						"name":"最新文章",
+						"key":"MENU_RECENT_POSTS"
+					},
+					{
+						"type":"click",
+						"name":"随机文章",
+						"key":"MENU_RANDOM_POSTS"
+					},
+					{
+						"type":"click",
+						"name":"热门文章",
+						"key":"MENU_HOTEST_POSTS"
+					}
+				]
+	    },
+	    {
+	      "type":"view",
+	      "name":"FB主页",
+	      "url":"http://www.freebuf.com"
+	    },
+	    {
+	      "type":"view",
+	      "name":"微社区",
+	      "url":"http://wx.wsq.qq.com/187329269"
+	    }]
+  	}';
+
+        $access_token = $this->get_access_token();
+        $res = $this->http_post_result("https://api.weixin.qq.com/cgi-bin/menu/create?access_token=".$access_token, $menu_json);
+        return $res;
+    }
+    public function fetch_menu() {
+        $access_token = $this->get_access_token();
+        $res = $this->http_get_result("https://api.weixin.qq.com/cgi-bin/menu/get?access_token=".$access_token);
+        return $res;
+    }
+    /**
+     *  获取token，使用文件缓存机制
+     *  首先检查文件是否存在，存在则检查token是否过期
+     *  若过期或文件不存在，则向服务器请求，然后存入文件
+     *
+     */
+    public function get_access_token() {
+        //$path = WEIXIN_ROBOT_PLUGIN_DIR."/access_token.json";
+        $json = dump(Cache::get('access_data'));
+        // 检查文件并查看token是否过期
+        //if(file_exists($path)) {
+        if ($json){
+           // $json = file_get_contents($path);
+            if(!isset($json['access_token']) || !isset($json['time']) || !isset($json['expires_in']))
+                return false;
+            $array = json_decode($json, true);
+            $expires_time = intval($array["time"]) + intval($array["expires_in"]) - 100;
+            $now = time();
+            if($now < $expires_time)
+                return $array["access_token"];
+        }
+        // 如果文件不存在或者token已经过期则向服务器请求
+        $result = $this->http_get_result("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".APPID."&secret=".APPSECRET);
+        if($result) {
+            $json = json_decode($result, true);
+            echo "expires_in上还是：".$json["expires_in"];
+            if(!$json || isset($json['errcode']))
+                return false;
+            $json["time"] = time();
+            //$json = json_encode($json);
+            // 写入文件
+            //$file = fopen($path, "wb");
+            Cache::set("access_data",json_encode($json),3600);
+//            if($file!==false) {
+//                fwrite($file, $json);
+//                fclose($file);
+//            }
+            echo "access_token的数据:".$json["access_token"];
+            return $json["access_token"];
+        }
+        return false;
+    }
+
+    /**
+     * 使用curl实现GET请求
+     */
+    private function http_get_result($url) {
+        $oCurl = curl_init();
+        if(stripos($url, "https://")!==FALSE) {
+            curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($oCurl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        }
+        curl_setopt($oCurl, CURLOPT_URL, $url);
+        curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, 1);
+        $content = curl_exec($oCurl);
+        $status = curl_getinfo($oCurl);
+        curl_close($oCurl);
+        if(intval($status["http_code"])==200)
+            return $content;
+        else
+            return false;
+    }
+    /**
+     * POST 请求
+     * @param string $url
+     * @param array $param
+     * @return string $result
+     */
+private function http_post_result($url, $param) {
+        $oCurl = curl_init();
+        if(stripos($url,"https://")!==FALSE){
+            curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($oCurl, CURLOPT_SSL_VERIFYHOST, false);
+        }
+        if (is_string($param)) {
+            $strPOST = $param;
+        } else {
+            $aPOST = array();
+            foreach($param as $key=>$val) {
+                $aPOST[] = $key."=".urlencode($val);
+            }
+            $strPOST =  join("&", $aPOST);
+        }
+        curl_setopt($oCurl, CURLOPT_URL, $url);
+        curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, 1 );
+        curl_setopt($oCurl, CURLOPT_POST,true);
+        curl_setopt($oCurl, CURLOPT_POSTFIELDS,$strPOST);
+        $result = curl_exec($oCurl);
+        $status = curl_getinfo($oCurl);
+        curl_close($oCurl);
+        if(intval($status["http_code"])==200)
+            return $result;
+        return $status["http_code"];
+    }
 }
 class wechatCallbackapiTest
 {
@@ -107,9 +249,9 @@ class wechatCallbackapiTest
         switch ($object->Event)
         {
             case "subscribe":
-                $content = "欢迎使用方倍工作室微信开发入门教程Demo\n请回复以下关键字：文本 表情 单图文 多图文 音乐\n请按住说话 或 点击 + 再分别发送以下内容：语音 图片 小视频 我的收藏 位置";
+                $content = "请回复以下关键字：文本 表情 单图文 多图文 音乐\n请按住说话 或 点击 + 再分别发送以下内容：语音 图片 小视频 我的收藏 位置";
                 $content .= (!empty($object->EventKey))?("\n来自二维码场景 ".str_replace("qrscene_","",$object->EventKey)):"";
-                $content .= "\n\n".'<a href="http://m.cnblogs.com/?u=txw1958">技术支持 方倍工作室</a>';
+                $content .= "\n\n".'<a href="http://microcodor.com">技术支持</a>';
                 break;
             case "unsubscribe":
                 $content = "取消关注";
@@ -119,7 +261,7 @@ class wechatCallbackapiTest
                 {
                     case "COMPANY":
                         $content = array();
-                        $content[] = array("Title"=>"方倍工作室", "Description"=>"", "PicUrl"=>"http://discuz.comli.com/weixin/weather/icon/cartoon.jpg", "Url" =>"http://m.cnblogs.com/?u=txw1958");
+                        $content[] = array("Title"=>"微码农", "Description"=>"", "PicUrl"=>"http://discuz.comli.com/weixin/weather/icon/cartoon.jpg", "Url" =>"http://microcodor.com");
                         break;
                     default:
                         $content = "点击菜单：".$object->EventKey;
@@ -191,12 +333,12 @@ class wechatCallbackapiTest
             $content = "微笑：/::)\n乒乓：/:oo\n中国：".$this->bytes_to_emoji(0x1F1E8).$this->bytes_to_emoji(0x1F1F3)."\n仙人掌：".$this->bytes_to_emoji(0x1F335);
         }else if (strstr($keyword, "单图文")){
             $content = array();
-            $content[] = array("Title"=>"单图文标题",  "Description"=>"单图文内容", "PicUrl"=>"http://discuz.comli.com/weixin/weather/icon/cartoon.jpg", "Url" =>"http://m.cnblogs.com/?u=txw1958");
+            $content[] = array("Title"=>"单图文标题",  "Description"=>"单图文内容", "PicUrl"=>"http://discuz.comli.com/weixin/weather/icon/cartoon.jpg", "Url" =>"http://microcodor.com");
         }else if (strstr($keyword, "图文") || strstr($keyword, "多图文")){
             $content = array();
-            $content[] = array("Title"=>"多图文1标题", "Description"=>"", "PicUrl"=>"http://discuz.comli.com/weixin/weather/icon/cartoon.jpg", "Url" =>"http://m.cnblogs.com/?u=txw1958");
-            $content[] = array("Title"=>"多图文2标题", "Description"=>"", "PicUrl"=>"http://d.hiphotos.bdimg.com/wisegame/pic/item/f3529822720e0cf3ac9f1ada0846f21fbe09aaa3.jpg", "Url" =>"http://m.cnblogs.com/?u=txw1958");
-            $content[] = array("Title"=>"多图文3标题", "Description"=>"", "PicUrl"=>"http://g.hiphotos.bdimg.com/wisegame/pic/item/18cb0a46f21fbe090d338acc6a600c338644adfd.jpg", "Url" =>"http://m.cnblogs.com/?u=txw1958");
+            $content[] = array("Title"=>"多图文1标题", "Description"=>"", "PicUrl"=>"http://discuz.comli.com/weixin/weather/icon/cartoon.jpg", "Url" =>"http://microcodor.com");
+            $content[] = array("Title"=>"多图文2标题", "Description"=>"", "PicUrl"=>"http://d.hiphotos.bdimg.com/wisegame/pic/item/f3529822720e0cf3ac9f1ada0846f21fbe09aaa3.jpg", "Url" =>"http://microcodor.com");
+            $content[] = array("Title"=>"多图文3标题", "Description"=>"", "PicUrl"=>"http://g.hiphotos.bdimg.com/wisegame/pic/item/18cb0a46f21fbe090d338acc6a600c338644adfd.jpg", "Url" =>"http://microcodor.com");
         }else if (strstr($keyword, "音乐")){
             $content = array();
             $content = array("Title"=>"最炫民族风", "Description"=>"歌手：凤凰传奇", "MusicUrl"=>"http://mascot-music.stor.sinaapp.com/zxmzf.mp3", "HQMusicUrl"=>"http://mascot-music.stor.sinaapp.com/zxmzf.mp3");
