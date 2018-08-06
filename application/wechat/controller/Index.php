@@ -1,16 +1,19 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 使用Gaoming13-sdk握手
  * User: jinchun
  * Date: 2018/8/4
  * Time: 下午2:59
  */
 namespace app\wechat\controller;
 
-require '../../../../autoload.php';
+use app\wechat\utils\WechatUtil;
 use Gaoming13\WechatPhpSdk\Api;
 use Gaoming13\WechatPhpSdk\Wechat;
 use think\Controller;
+use think\Loader;
+
+
 
 class Index extends Controller {
 
@@ -68,5 +71,58 @@ class Index extends Controller {
 
         // 主动发送
         $api->send($msg->FromUserName, '这是我主动发送的一条消息');
+    }
+    public function createMenu(){
+        // api模块 - 包含各种系统主动发起的功能
+        $api = new Api(
+            array(
+                'appId' => config('appID'),
+                'appSecret'	=> config('appSecret'),
+                'get_access_token' => function(){
+                    // 用户需要自己实现access_token的返回
+                    $wechatUtil = new WechatUtil();
+                    $access_token = $wechatUtil->get_access_token();
+                    return $access_token;
+                },
+                'save_access_token' => function($token) {
+                    // 用户需要自己实现access_token的保存
+                    echo 'wechat_token', $token;
+                }
+            )
+        );
+        $menu_json = '{
+	    "button":[
+	    {
+				"name":"京仓京配",
+				"type":"view",
+				"url":"http://microcodor.com"
+	    },
+	    {
+	      "type":"view",
+	      "name":"爆品高佣",
+	      "url":"http://microcodor.com"
+	    },
+	    {
+	      "name":"服务中心",
+	      "sub_button":[
+					{
+						"type":"click",
+						"name":"今日必推",
+						"key":"MENU_RECENT_POSTS"
+					},
+					{
+						"type":"click",
+						"name":"推广榜单",
+						"key":"MENU_RANDOM_POSTS"
+					},
+					{
+						"type":"click",
+						"name":"万能转链",
+						"key":"MENU_HOTEST_POSTS"
+					}
+				]
+	    }]
+  	}';
+        $api->create_menu($menu_json);
     }
 }
