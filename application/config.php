@@ -236,4 +236,15 @@ return [
         'var_page'  => 'page',
         'list_rows' => 15,
     ],
+    //'配置项'=>'配置值'
+    'appID'=>'wxd92439ed67f18c2a',
+    'appSecret'=>'711da457037ce5073af0689dd3ba8dbd',
+    'token'=>'jdwechatapp',
+
+    // 视图输出字符串内容替换
+    'view_replace_str'       => [
+        '_CSS_'=>'../../public/static/css',
+        '_JS_'=>'../../public/static/js'
+    ],
+
 ];

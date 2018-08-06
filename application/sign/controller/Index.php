@@ -103,7 +103,7 @@ class Index
                 return $array["access_token"];
         }
         // 如果文件不存在或者token已经过期则向服务器请求
-        $result = $this->http_get_result("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".APPID."&secret=".APPSECRET);
+        $result = $this->http_get_result("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".config("appID")."&secret=".config("appSecret"));
         if($result) {
             $json = json_decode($result, true);
             echo "expires_in上还是：".$json["expires_in"];
@@ -185,7 +185,7 @@ class wechatCallbackapiTest
         $signature = $_GET["signature"];
         $timestamp = $_GET["timestamp"];
         $nonce = $_GET["nonce"];
-        $token = TOKEN;
+        $token = config("token");
         $tmpArr = array($token, $timestamp, $nonce);
         sort($tmpArr, SORT_STRING);
         $tmpStr = implode($tmpArr);
