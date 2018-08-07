@@ -9,6 +9,7 @@ class Index extends Controller
 {
     public function index()
     {
+
         return view('index');
     }
     public function  main(){
@@ -25,5 +26,8 @@ class Index extends Controller
         $nickName = User::get(323221123)['nickName'];
         echo $nickName;
         return "this is main page：".$nickName;
+    }
+    public function test(){
+        return dirname($_SERVER['SCRIPT_NAME']);
     }
 }
