@@ -243,7 +243,7 @@ return [
 
     // 视图输出字符串内容替换
     'view_replace_str'       => [
-        '__CSS__'=>'/jdwechatapp/public/static/css',
+        '__IMG__'=>TPL_PATH.'/static/images',
     ],
 
 ];

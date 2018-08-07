@@ -36,7 +36,7 @@ class WechatUtil{
         $result = $this->http_get_result("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".config("appID")."&secret=".config("appSecret"));
         if($result) {
             $json = json_decode($result, true);
-            echo "expires_in上还是：".$json["expires_in"];
+            //echo "expires_in上还是：".$json["expires_in"];
             if(!$json || isset($json['errcode']))
                 return false;
             $json["time"] = time();
@@ -48,7 +48,7 @@ class WechatUtil{
             //                fwrite($file, $json);
             //                fclose($file);
             //            }
-            echo "access_token的数据:".$json["access_token"];
+            //echo "access_token的数据:".$json["access_token"];
             return $json["access_token"];
         }
         return false;

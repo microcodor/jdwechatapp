@@ -6,12 +6,43 @@
  * Time: 下午8:59
  */
 namespace app\auth\controller;
-namespace app\index\model;
+use app\wechat\utils\WechatUtil;
+use Gaoming13\WechatPhpSdk\Api;
+use Gaoming13\WechatPhpSdk\Utils\FileCache;
+use think\Controller;
 
-class Index
+class Index extends Controller
 {
     public function index()
     {
+
+        $cache =  new FileCache;
+        // api模块
+        $api = new Api(
+            array(
+                'appId' => config("appID"),
+                'appSecret' => config('appSecret'),
+                'get_access_token' => function() use ($cache) {
+                    $wechatUtil = new WechatUtil();
+                    $access_token = $wechatUtil->get_access_token();
+                    return $access_token;
+                },
+                'save_access_token' => function($token) use ($cache) {
+                    // 用户需要自己实现access_token的保存
+                    //$cache->set('access_token', $token, 7000);
+                }
+            )
+        );
+        // 注意 URL 一定要动态获取，不能 hardcode.
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+        $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+        $jsapi_config =  $api->get_jsapi_config($url);
+        //echo "jsapi_config:".$jsapi_config['nonceStr'];
+        return json($jsapi_config);
+    }
+
+    public function auth(){
         //授权完跳转的网址
         $path = $_REQUEST['path'];
         //用户同意授权后回调的网址.必须使用url对回调网址进行编码，我们也将授权完跳转对网址,
