@@ -87,7 +87,6 @@ class Index extends Controller {
 
         // 用户回复2 - 回复图片消息
         if ($msg->MsgType == 'text' && $msg->Content == '2') {
-
             $wechat->reply(array(
                 'type' => 'image',
                 // 通过素材管理接口上传多媒体文件，得到的id

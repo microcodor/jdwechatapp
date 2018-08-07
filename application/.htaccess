@@ -1,1 +1,6 @@
-deny from all
+<IfModule mode_rewrite.c >
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond $1 !^(static|upload)
+RewriteRule ^(.*)$ index.php?/$1 [QSA,PT,L]
+</IfModule>
