@@ -249,8 +249,10 @@ class Index extends Controller {
         list($err, $user_info) = $api->get_userinfo_by_authorize('snsapi_base');
         if ($user_info !== null) {
             var_dump($user_info);;
+            header('Location:'.$_REQUEST['state']);
         } else {
             echo '授权失败！';
         }
+
     }
 }

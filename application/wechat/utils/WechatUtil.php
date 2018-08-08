@@ -80,7 +80,8 @@ class WechatUtil{
                 }
             )
         );
-        $api->get_authorize_url($auth_type, $callback_url,$main_url);
+        $path = $api->get_authorize_url($auth_type, $callback_url,$main_url);
+        header('Location:'.$path);
     }
 
     /**
