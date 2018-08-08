@@ -2,6 +2,7 @@
 namespace app\index\controller;
 
 use app\index\model\User;
+use app\wechat\utils\WechatUtil;
 use think\Controller;
 use think\db;
 
@@ -12,8 +13,15 @@ class Index extends Controller
 
         return view('index');
     }
+    //snsapi_userinfo snsapi_base
     public function  main(){
-//        $user = Db::table('user')->where('openId',323221122)->find();
+        $wechatUtil = new WechatUtil();
+        $wechatUtil->web_auth("snsapi_userinfo",
+            "http://wx.microcodor.com/wechat/index/auth_callback","http://wx.microcodor.com/index");
+    }
+
+    public function test(){
+        //        $user = Db::table('user')->where('openId',323221122)->find();
 //        if (!$user){
 //            $data = ['openId' => '323221122', 'nickName' => 'jinchun','headImgUrl' => 'htttp://wx.microcodor.com'];
 //            Db::table('user')->insert($data);
@@ -26,8 +34,5 @@ class Index extends Controller
         $nickName = User::get(323221123)['nickName'];
         echo $nickName;
         return "this is main page：".$nickName;
-    }
-    public function test(){
-        return dirname($_SERVER['SCRIPT_NAME']);
     }
 }

@@ -12,7 +12,11 @@ use Gaoming13\WechatPhpSdk\Api;
 use Gaoming13\WechatPhpSdk\Utils\FileCache;
 use think\Cache;
 use think\Controller;
+use think\Exception;
 
+/**
+* 原生测试页
+ */
 class Index extends Controller
 {
     //jssdk授权前信息获取
@@ -42,32 +46,6 @@ class Index extends Controller
         $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $jsapi_config =  $api->get_jsapi_config($url);
         return json($jsapi_config);
-    }
-    public function test(){
-        $cache =  new FileCache;
-        // api模块
-        $api = new Api(
-            array(
-                'appId' => config("appID"),
-                'appSecret' => config('appSecret'),
-                'get_access_token' => function() use ($cache) {
-                    $wechatUtil = new WechatUtil();
-                    $access_token = $wechatUtil->get_access_token();
-                    return $access_token;
-                },
-                'save_access_token' => function($token) use ($cache) {
-                    // 用户需要自己实现access_token的保存
-                    //$cache->set('access_token', $token, 7000);
-                }
-            )
-        );
-        $djd = dump(Cache::get('test_data'));
-        if ($djd){
-            echo $djd;
-        }else{
-            Cache::set("test_data","aaaaa");
-        }
-
     }
 
     public function auth(){
@@ -132,6 +110,7 @@ class Index extends Controller
                 if($user){
                     session('openId',$user['openId']);
                 }else{
+                    throw  new Exception("null");
                     $model = new User($array);
                     $model ->save();
                     //将用户在数据库中的唯一表示保存在session中

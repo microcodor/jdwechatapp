@@ -8,6 +8,8 @@
 
 namespace app\wechat\utils;
 
+use Gaoming13\WechatPhpSdk\Api;
+use Gaoming13\WechatPhpSdk\Utils\FileCache;
 use think\Cache;
 
 class WechatUtil{
@@ -54,6 +56,31 @@ class WechatUtil{
             return $json["access_token"];
         }
         return false;
+    }
+
+    /**
+    *  微信网页授权
+     */
+    public function web_auth($auth_type,$callback_url,$main_url){
+        $cache =  new FileCache;
+
+        // api模块
+        $api = new Api(
+            array(
+                'appId' => config("appID"),
+                'appSecret' => config('appSecret'),
+                'get_access_token' => function() use ($cache) {
+                    // echo "\nget_access_token:".json_decode($cache->get('access_token'))->access_token;
+                    return json_decode($cache->get('access_token'))->access_token;
+                },
+                'save_access_token' => function($token) use ($cache) {
+                    //echo "\nsave_access_token:".$token;
+                    // 用户需要自己实现access_token的保存
+                    $cache->set('access_token', $token, 3600);
+                }
+            )
+        );
+        $api->get_authorize_url($auth_type, $callback_url,$main_url);
     }
 
     /**
