@@ -74,7 +74,9 @@ class Index extends Controller
         $path = $_REQUEST['path'];
         //echo $path;
         //用户同意授权后回调的网址.必须使用url对回调网址进行编码，我们也将授权完跳转对网址,
-        $redirect_uri = urlencode('http://'.$_SERVER['HTTP_HOST'].'/auth/index/callBack');
+        //http://wx.microcodor.com/auth/index/callBack
+            //$redirect_uri = urlencode('http://'.$_SERVER['HTTP_HOST'].'/auth/index/callBack');
+        $redirect_uri = urlencode('http://wx.microcodor.com/auth/index/callBack');
         //echo $redirect_uri;
         header('Location:https://open.weixin.qq.com/connect/oauth2/authorize?appid='
             .config('appID').'&redirect_uri='.$redirect_uri.'&response_type=code&scope=snsapi_userinfo&state='.$path.
