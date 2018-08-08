@@ -119,6 +119,7 @@ class Api
         if ($this->get_access_token_diy !== false) {
             // 调用用户自定义获取AccessToken方法
             $token = call_user_func($this->get_access_token_diy);
+
             if ($token) {
                 $token = json_decode($token);
             }
@@ -126,7 +127,8 @@ class Api
             // 异常处理: 获取access_token方法未定义
             @error_log('Not set get_tokenDiy method, AccessToken will be refreshed each time.', 0);
         }
-        // 验证AccessToken是否有效        
+        // 验证AccessToken是否有效
+
         if (!$this->valid_access_token($token)) {
 
             // 生成新的AccessToken

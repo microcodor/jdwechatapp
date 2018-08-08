@@ -19,7 +19,9 @@ class WechatUtil{
      */
     public function get_access_token() {
         //$path = WEIXIN_ROBOT_PLUGIN_DIR."/access_token.json";
-        $json = dump(Cache::get('access_data'));
+        $json = Cache::get('access_data');
+        echo "缓存access_token的数据:".$json;
+
         // 检查文件并查看token是否过期
         //if(file_exists($path)) {
         if ($json){
@@ -43,7 +45,7 @@ class WechatUtil{
             //$json = json_encode($json);
             // 写入文件
             //$file = fopen($path, "wb");
-            Cache::set("access_data",json_encode($json),3600);
+            Cache::set("access_data",json_encode($json),7000);
             //            if($file!==false) {
             //                fwrite($file, $json);
             //                fclose($file);

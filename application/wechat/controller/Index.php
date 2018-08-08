@@ -191,7 +191,7 @@ class Index extends Controller {
 	    {
 				"name":"京仓京配",
 				"type":"view",
-				"url":"http://microcodor.com"
+				"url":"http://wx.microcodor.com/index"
 	    },
 	    {
 	      "type":"view",

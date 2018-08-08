@@ -9,13 +9,40 @@ namespace app\auth\controller;
 use app\wechat\utils\WechatUtil;
 use Gaoming13\WechatPhpSdk\Api;
 use Gaoming13\WechatPhpSdk\Utils\FileCache;
+use think\Cache;
 use think\Controller;
 
 class Index extends Controller
 {
+    //jssdk授权前信息获取
     public function index()
     {
 
+        $cache =  new FileCache;
+
+        // api模块
+        $api = new Api(
+            array(
+                'appId' => config("appID"),
+                'appSecret' => config('appSecret'),
+                'get_access_token' => function() use ($cache) {
+                   // echo "\nget_access_token:".json_decode($cache->get('access_token'))->access_token;
+                    return json_decode($cache->get('access_token'))->access_token;
+                },
+                'save_access_token' => function($token) use ($cache) {
+                    //echo "\nsave_access_token:".$token;
+                    // 用户需要自己实现access_token的保存
+                    $cache->set('access_token', $token, 3600);
+                }
+            )
+        );
+        // 注意 URL 一定要动态获取，不能 hardcode.
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+        $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $jsapi_config =  $api->get_jsapi_config($url);
+        return json($jsapi_config);
+    }
+    public function test(){
         $cache =  new FileCache;
         // api模块
         $api = new Api(
@@ -33,20 +60,22 @@ class Index extends Controller
                 }
             )
         );
-        // 注意 URL 一定要动态获取，不能 hardcode.
-        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-        $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $djd = dump(Cache::get('test_data'));
+        if ($djd){
+            echo $djd;
+        }else{
+            Cache::set("test_data","aaaaa");
+        }
 
-        $jsapi_config =  $api->get_jsapi_config($url);
-        //echo "jsapi_config:".$jsapi_config['nonceStr'];
-        return json($jsapi_config);
     }
 
     public function auth(){
         //授权完跳转的网址
         $path = $_REQUEST['path'];
+        //echo $path;
         //用户同意授权后回调的网址.必须使用url对回调网址进行编码，我们也将授权完跳转对网址,
-        $redirect_uri = urlencode('http://'.$_SERVER['HTTP_HOST'].'/auth/callback');
+        $redirect_uri = urlencode('http://'.$_SERVER['HTTP_HOST'].'/auth/index/callBack');
+        //echo $redirect_uri;
         header('Location:https://open.weixin.qq.com/connect/oauth2/authorize?appid='
             .config('appID').'&redirect_uri='.$redirect_uri.'&response_type=code&scope=snsapi_userinfo&state='.$path.
             '#wechat_redirect');

@@ -210,12 +210,13 @@ $(function () {
             imgUrl: 'https://mmbiz.qpic.cn/mmemoticon/ajNVdqHZLLA16apETUPXh9Q5GLpSic7lGuiaic0jqMt4UY8P4KHSBpEWgM7uMlbxxnVR7596b3NPjUfwg7cFbfCtA/0'
         };
 
-        $.getJSON('https://weui.io/api/sign?&url=' + encodeURIComponent(location.href.split('#')[0]), function (res) {
-            //alert(res);
+        //$.getJSON('auth/index?&url=' + encodeURIComponent(location.href.split('#')[0]), function (res) {
+        $.getJSON('../public/auth/index', function (res) {
+            console.log(res);
             wx.config({
                 beta: true,
-                debug: false,
-                appId: res.appid,
+                debug: true,
+                appId: res.appId,
                 timestamp: res.timestamp,
                 nonceStr: res.nonceStr,
                 signature: res.signature,
@@ -286,7 +287,7 @@ $(function () {
         preload();
         fastClick();
         androidInputBugFix();
-        //setJSAPI();
+        setJSAPI();
         setPageManager();
 
         window.pageManager = pageManager;
