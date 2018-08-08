@@ -6,6 +6,7 @@
  * Time: 下午8:59
  */
 namespace app\auth\controller;
+use app\index\model\User;
 use app\wechat\utils\WechatUtil;
 use Gaoming13\WechatPhpSdk\Api;
 use Gaoming13\WechatPhpSdk\Utils\FileCache;
