@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+      <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+      <meta name="format-detection" content="telephone=no" />
+      <meta http-equiv="Pragma" content="no-cache" />
+      <meta http-equiv="Cache-Control" content="no-cache" />
+      <meta http-equiv="Expires" content="0" />
+    <title>首页</title>
+    <link rel="stylesheet" href="__STATIC__/css/weui.css"/>
+    <script type="text/javascript" src="__STATIC__/js/iscroll-probe.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/demoUtils.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/zepto.min.js"></script>
+
+      <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+      <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+      <!--[if lt IE 9]>
+      <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+      <![endif]-->
+      <style type="text/css">
+          * {
+              -webkit-box-sizing: border-box;
+              -moz-box-sizing: border-box;
+              box-sizing: border-box;
+          }
+
+          html {
+              -ms-touch-action: none;
+          }
+
+          body,ul,li {
+              padding: 0;
+              margin: 0;
+              border: 0;
+          }
+
+          body {
+              display: block;
+              font-size: 12px;
+              font-family: ubuntu, helvetica, arial;
+              overflow: hidden; /* this is important to prevent the whole page to bounce */
+          }
+
+          #header {
+              position: absolute;
+              z-index: 2;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 45px;
+              line-height: 45px;
+              background: #CD235C;
+              padding: 0;
+              color: #eee;
+              font-size: 20px;
+              text-align: center;
+              font-weight: bold;
+          }
+
+          #footer {
+              position: absolute;
+              z-index: 2;
+              bottom: 0;
+              left: 0;
+              width: 100%;
+              height: 48px;
+              background: #444;
+              padding: 0;
+              border-top: 1px solid #444;
+          }
+
+          #wrapper,#wrapper2, #wrapper3 {
+              position: absolute;
+              z-index: 1;
+              top: 45px;
+              bottom: 48px;
+              left: 0;
+              width: 100%;
+              background: #ccc;
+              /*overflow: hidden;*/
+          }
+
+          #scroller,#scroller2,#scroller3 {
+              position: absolute;
+              z-index: 1;
+              -webkit-tap-highlight-color: rgba(0,0,0,0);
+              width: 100%;
+              /*height: 1280px;*/
+              -webkit-transform: translateZ(0);
+              -moz-transform: translateZ(0);
+              -ms-transform: translateZ(0);
+              -o-transform: translateZ(0);
+              transform: translateZ(0);
+              -webkit-touch-callout: none;
+              -webkit-user-select: none;
+              -moz-user-select: none;
+              -ms-user-select: none;
+              user-select: none;
+              -webkit-text-size-adjust: none;
+              -moz-text-size-adjust: none;
+              -ms-text-size-adjust: none;
+              -o-text-size-adjust: none;
+              text-size-adjust: none;
+          }
+
+          #scroller ul,#scroller2 ul,#scroller3 ul {
+              list-style: none;
+              padding: 0;
+              margin: 0;
+              width: 100%;
+              text-align: center;
+          }
+
+          #scroller li,#scroller2 li,#scroller3 li {
+              padding: 0 10px;
+              height: 40px;
+              line-height: 40px;
+              border-bottom: 1px solid #ccc;
+              border-top: 1px solid #fff;
+              background-color: #fafafa;
+              font-size: 14px;
+          }
+          #monitor {
+              position: absolute;
+              left: 51%;
+          }
+          #wrapper p{position:absolute; text-align:center; height:3rem; line-height:3rem; color:red; width:100%;}
+
+          #wrapper p.p-2{bottom:0;}
+
+          .weui-cells {
+              margin-top: 0px !important;
+          }
+          .weui-cell{
+              display: flex;
+              height: 160px;
+              flex-direction: row;
+          }
+          .weui-cell__bd {
+              display: flex;
+              flex-direction: column;
+              align-content: center;
+              margin-left: 6px;
+          }
+          .jd-price{
+              font-size: 12px;
+              color: gray;
+              text-decoration:line-through;
+              margin-top: 10px;
+          }
+          .jd-sell-price{
+              font-size: 12px;
+              color: red;
+              margin-top: 10px;
+          }
+      </style>
+  </head>
+  <body ontouchstart  onload="loaded()">
+  <div class="weui-navbar">
+      <div href="#tab1" class="weui-navbar__item weui-bar__item_on">
+          选项一
+      </div>
+      <div href="#tab2" class="weui-navbar__item">
+          选项二
+      </div>
+      <div href="#tab3" class="weui-navbar__item">
+          选项三
+      </div>
+  </div>
+
+
+
+  <!--  </div> -->
+  <div class="content">
+      <div id="wrapper" style="display: block;">
+          <div id="scroller">
+              <!-- <ul>
+                  <li id="-1">
+                      <div class="item">
+                          <img src="" class="item-img">
+
+
+                      </div>
+                  tieleeeeeeeeee:<button id="-1" style="">button</button>
+
+
+                  </li>
+              </ul> -->
+              <div class="weui-cells">
+                  <div class="weui-cell">
+                      <div class="weui-cell__hd"><img src="https://img14.360buyimg.com/n0/jfs/t21235/25/2215358474/458789/b2b86e63/5b4c445dNf383b504.jpg" alt="" style="width:120px;margin-right:5px;display:block"></div>
+                      <div class="weui-cell__bd">
+                          <div class="jd-title">花花公子正品，有防伪标签</div>
+                          <div class="jd-price">京东价：¥198</div>
+                          <div class="jd-sell-price">内购价：¥89（券后）</div>
+                      </div>
+                      <div class="weui-cell__ft"><a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary">一键推广</a></div>
+                  </div>
+
+              </div>
+          </div>
+          <p class="p-1">下拉刷新</p>
+          <p class="p-2">上拉加载</p>
+      </div>
+
+  </div>
+
+  <script type="text/javascript">
+      var myScroll;
+      function loaded () {
+          myScroll = new IScroll('#wrapper', {mouseWheel: true,preventDefault: false});
+      }
+      document.addEventListener('touchmove', function (e) { e.preventDefault(); }, isPassive() ? {
+          capture: false,
+          passive: false
+      } : false);
+      $(function(){
+          var tabIndex = "#tab1";
+          console.log("default-tab:"+tabIndex);
+          $('.weui-navbar__item').on('click', function () {
+              $(this).addClass('weui-bar__item_on').siblings('.weui-bar__item_on').removeClass('weui-bar__item_on');
+              console.log(tabIndex==$(this).attr("href"));
+              if (tabIndex==$(this).attr("href")) {
+                  myScroll.scrollTo(0, 0);
+              }else{
+                  tabIndex = $(this).attr("href");
+                  initData();
+              }
+
+
+              $(tabIndex).show().siblings().hide();
+
+          });
+          var index = 0;
+          loaded();
+          initData();
+
+          console.log("初始化数据："+myScroll.y + '&' + myScroll.maxScrollY);
+          myScroll.on('scroll', refreshData);
+          myScroll.on('scrollEnd', loadMore);
+
+          function initData(){
+              $('#scroller ul').empty();
+              for (var i = 0; i < 20; i++) {
+                  var li = '<li  class="link" id="'+i+'">'+tabIndex+'=Click me:'+i+'</li>';//onclick="item_click('+i+');"
+                  $('#scroller ul').append(li);
+              }
+              index = 20;
+              myScroll.refresh();
+          }
+          function refreshData(){
+              console.log("refreshData:"+myScroll.y);
+              if (myScroll.y>60) {
+                  console.log("开始刷新数据");
+                  $('#scroller ul').empty();
+                  initData();
+                  myScroll.refresh();
+                  console.log("刷新数据完成");
+              }
+          }
+          function loadMore () {
+              var currentIndex = tabIndex;
+              console.log(myScroll.y + '&' + myScroll.maxScrollY);
+              if(myScroll.y <= myScroll.maxScrollY){
+                  //position.innerHTML = this.y>>0;
+                  console.log("滑动到最底部了");
+                  setTimeout(function(){
+                      console.log("返回数据："+(currentIndex===tabIndex));
+                      if (currentIndex===tabIndex) {
+                          for (var i = index; i < index+20; i++) {
+                              var li = '<li  class="link" id="'+i+'">'+tabIndex+'=Click me:'+i+'</li>';//onclick="item_click('+i+');"
+                              $('#scroller ul').append(li);
+                          }
+                          index = index+20;
+                          console.log("添加数据index:"+index);
+                          myScroll.refresh();
+                      }
+                  },1000);
+
+              }
+          }
+          $('#scroller').on('click', 'ul li', function(event){
+              var val=$(this).attr("id");
+              console.log("click:"+val);
+          })
+          $('#scroller').on('touchend', 'li button', function(e){
+              var val=$(this).attr("id");
+              console.log("button click:"+val);
+              e.preventDefault();
+          })
+      });
+
+  </script>
+
+            <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+
+
+
+  </body>
+</html>

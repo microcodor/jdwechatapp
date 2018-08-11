@@ -87,7 +87,7 @@ class WechatUtil{
     /**
      * 使用curl实现GET请求
      */
-    private function http_get_result($url) {
+    public function http_get_result($url) {
         $oCurl = curl_init();
         if(stripos($url, "https://")!==FALSE) {
             curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);

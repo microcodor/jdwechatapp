@@ -165,6 +165,10 @@ class Index extends Controller {
             ));
             exit();
         }
+        if ($msg->MsgType == 'text'){
+            Log::write($msg->Content,'notice');
+
+        }
 
         // 默认回复默认信息
         $wechat->reply($default_msg);
@@ -195,7 +199,7 @@ class Index extends Controller {
 	    {
 				"name":"京仓京配",
 				"type":"view",
-				"url":"http://wx.microcodor.com/index"
+				"url":"http://wx.microcodor.com/index/index/main"
 	    },
 	    {
 	      "type":"view",
