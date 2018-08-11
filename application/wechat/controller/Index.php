@@ -78,7 +78,7 @@ class Index extends Controller {
 
         // 用户回复1 - 回复文本消息
         if ($msg->MsgType == 'text' && $msg->Content == '1') {
-
+            Log::write($msg->Content,'notice');
             $wechat->reply("hello world!");
             /* 也可使用这种数组方式回复
             $wechat->reply(array(
