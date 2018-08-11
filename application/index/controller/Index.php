@@ -8,6 +8,7 @@ use app\wechat\utils\WechatUtil;
 use think\Controller;
 use think\db;
 use app\wechat\utils\Util;
+use think\Log;
 
 
 class Index extends Controller
@@ -28,7 +29,7 @@ class Index extends Controller
     }
 
     public function savedata(){
-        #str = '';
+        Log::write("111111111111",'notice');
 
     }
 
