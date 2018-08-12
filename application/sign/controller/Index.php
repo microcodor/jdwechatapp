@@ -15,6 +15,7 @@ namespace app\sign\controller;
 //Loader::import('Gaoming13\WechatPhpSdk\Api', EXTEND_PATH);
 //Loader::import('Gaoming13\WechatPhpSdk\Wechat', EXTEND_PATH);
 use think\Cache;
+use think\Log;
 
 /**
  * 与微信公众平台握手
@@ -201,7 +202,8 @@ class wechatCallbackapiTest
     {
         $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
         if (!empty($postStr)){
-            $this->logger("R \r\n".$postStr);
+            //$this->logger("R \r\n".$postStr);
+            Log::write("R \r\n".$postStr,'responseMsg');
             $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
             $RX_TYPE = trim($postObj->MsgType);
 
@@ -234,7 +236,8 @@ class wechatCallbackapiTest
                     $result = "unknown msg type: ".$RX_TYPE;
                     break;
             }
-            $this->logger("T \r\n".$result);
+            //$this->logger("T \r\n".$result);
+            Log::write("T \r\n".$result,'responseMsg');
             echo $result;
         }else {
             echo "";
@@ -594,21 +597,6 @@ $item_str    </Articles>
             return chr(0xC0 | (($cp & 0x7C0) >> 6)).chr(0x80 | ($cp & 0x3F));
         }else{                    # 1 byte
             return chr($cp);
-        }
-    }
-
-    //日志记录
-    private function logger($log_content)
-    {
-        if(isset($_SERVER['HTTP_APPNAME'])){   //SAE
-            sae_set_display_errors(false);
-            sae_debug($log_content);
-            sae_set_display_errors(true);
-        }else if($_SERVER['REMOTE_ADDR'] != "127.0.0.1"){ //LOCAL
-            $max_size = 1000000;
-            $log_filename = "log.xml";
-            if(file_exists($log_filename) and (abs(filesize($log_filename)) > $max_size)){unlink($log_filename);}
-            file_put_contents($log_filename, date('Y-m-d H:i:s')." ".$log_content."\r\n", FILE_APPEND);
         }
     }
 } //classend
