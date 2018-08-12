@@ -7,6 +7,7 @@
  */
 namespace app\wechat\controller;
 
+use app\wechat\utils\Util;
 use app\wechat\utils\WechatUtil;
 use Gaoming13\WechatPhpSdk\Api;
 use Gaoming13\WechatPhpSdk\Utils\FileCache;
@@ -75,7 +76,8 @@ class Index extends Controller {
             $wechat->reply($default_msg);
             exit();
         }
-
+        Log::write('MsgType:'.$msg->MsgType,'notice');
+        Log::write('Content:'.$msg->Content,'notice');
         // 用户回复1 - 回复文本消息
         if ($msg->MsgType == 'text' && $msg->Content == '1') {
             Log::write($msg->Content,'notice');
@@ -165,9 +167,11 @@ class Index extends Controller {
             ));
             exit();
         }
-        if ($msg->MsgType == 'text'){
-            Log::write($msg->Content,'notice');
-
+        if ($msg->MsgType == 'text' && strpos($msg->Content,'http') !== false){
+            $resMsg = Util::save_data($msg->Content);
+            Log::write($resMsg,'notice');
+            $wechat->reply($resMsg);
+            exit();
         }
 
         // 默认回复默认信息

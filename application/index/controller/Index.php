@@ -29,7 +29,70 @@ class Index extends Controller
     }
 
     public function savedata(){
-        Log::write("111111111111",'notice');
+        $str = '【京东】【领券直降】赛丹狐（SAIDANHU） 户外运动T恤 情侣透气吸湿快干圆领短袖休闲健身T恤速干恤 彩兰【男】 XL
+——————————————
+京东价: ￥69.00。
+券后价: ￥39.00。
+领券抢购: https://union-click.jd.com/jdc?d=oRMFwF';
+        $flag = strstr($str, 'jd.com');
+        echo "flag:".$flag."<br>";
+        if ($flag){
+            $hello = explode("\n", $str);
+            echo "count:".count($hello)."<br>";
+            $goods = new Goods();
+            $goods->sku_id = 0;
+            for($index=0;$index<count($hello);$index++)
+            {
+
+                if(strpos($hello[$index],'【京东商城】') !== false||strpos($hello[$index],'【京东】') !== false){
+                    echo "sku_name:".$hello[$index];echo "</br>";
+                    if ($hello[$index]){
+                        $tmp_goods = $goods->where('sku_name', $hello[$index]);
+                        if ($tmp_goods){
+
+                            return '数据已存在';
+                        }
+                        $goods->sku_name = $hello[$index];
+                    }else{
+                        $goods->sku_name = "【京东商城】";
+                    }
+
+                }else if(strpos($hello[$index],'京东价') !== false){
+                    $price = substr($hello[$index],strpos($hello[$index],'￥')+3);
+                    echo "price:".$price;echo "</br>";
+                    $goods->price = $price;
+                }else if(strpos($hello[$index],'内购价') !== false||strpos($hello[$index],'券后价') !== false){
+                    $sell_price = substr($hello[$index],strpos($hello[$index],'￥')+3);
+                    echo "sell_price:".$sell_price;echo "</br>";
+                    $goods->sell_price = $sell_price;
+                }else if(strpos($hello[$index],'微信抢购') !== false){
+                    $str = substr($hello[$index],strpos($hello[$index],'：')+3);
+
+                    $sku_id = mb_substr($str,0,strpos($str,' '));
+                    if (!$sku_id){
+                        $sku_id = 0;
+                    }else{
+                        $tmp_goods = $goods->where('sku_id', $sku_id);
+                        if ($tmp_goods){
+                            return '数据已存在';
+                        }
+                    }
+                    echo "sku_id:".$sku_id;echo "</br>";
+                    $goods->sku_id = $sku_id;
+                    $commission = substr($str,strpos($str,' ')+1);
+                    $goods->commission = $commission;
+                    echo "commission:".$commission;echo "</br>";
+                }else if(strpos($hello[$index],'http') !== false){
+                    $coupon_url = substr($hello[$index],strpos($hello[$index],'http'));
+                    echo "coupon_url:".$coupon_url;echo "</br>";
+                    $goods->coupon_url = $coupon_url;
+                }
+
+
+            }
+            $goods->save();
+        }
+        //Log::write("111111111111",'notice');
 
     }
 
