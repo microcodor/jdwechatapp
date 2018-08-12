@@ -13,7 +13,6 @@ use Gaoming13\WechatPhpSdk\Api;
 use Gaoming13\WechatPhpSdk\Utils\FileCache;
 use Gaoming13\WechatPhpSdk\Wechat;
 use think\Controller;
-use think\Loader;
 use think\Log;
 
 
@@ -69,15 +68,15 @@ class Index extends Controller {
 
         // 默认消息
         $default_msg = "/微笑  欢迎关注本测试号:\n 回复1: 回复文本消息\n 回复2: 回复图片消息\n 回复3: 回复语音消息\n 回复4: 回复视频消息\n 回复5: 回复音乐消息\n 回复6: 回复图文消息";
-
+        Log::write('MsgType:'.$msg->MsgType,'log');
+        Log::write('Content:'.$msg->Content,'log');
         // 用户关注微信号后 - 回复用户普通文本消息
         if ($msg->MsgType == 'event' && $msg->Event == 'subscribe') {
 
             $wechat->reply($default_msg);
             exit();
         }
-        Log::write('MsgType:'.$msg->MsgType,'notice');
-        Log::write('Content:'.$msg->Content,'notice');
+
         // 用户回复1 - 回复文本消息
         if ($msg->MsgType == 'text' && $msg->Content == '1') {
             Log::write($msg->Content,'notice');
