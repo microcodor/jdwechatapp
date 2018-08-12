@@ -14,7 +14,7 @@ use Gaoming13\WechatPhpSdk\Utils\FileCache;
 use Gaoming13\WechatPhpSdk\Wechat;
 use think\Controller;
 use think\Loader;
-
+use think\Log;
 
 
 class Index extends Controller {
