@@ -51,7 +51,7 @@ class Util {
                     Log::write("sku_name:".$hello[$index],'save_data');
 
                     if ($hello[$index]){
-                        $tmp_goods = $goods->where('sku_name', $hello[$index]);
+                        $tmp_goods = $goods->where('sku_name', $hello[$index])->select();
                         if ($tmp_goods){
                             Log::write('数据已存在','save_data');
                             return '数据已存在';
@@ -78,7 +78,7 @@ class Util {
                     if (!$sku_id){
                         $sku_id = 0;
                     }else{
-                        $tmp_goods = $goods->where('sku_id', $sku_id);
+                        $tmp_goods = $goods->where('sku_id', $sku_id)->select();
                         if ($tmp_goods){
                             Log::write('数据已存在','save_data');
                             return '数据已存在';

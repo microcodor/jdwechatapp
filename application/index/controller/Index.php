@@ -29,11 +29,14 @@ class Index extends Controller
     }
 
     public function savedata(){
-        $str = '【京东】【领券直降】赛丹狐（SAIDANHU） 户外运动T恤 情侣透气吸湿快干圆领短袖休闲健身T恤速干恤 彩兰【男】 XL
-——————————————
-京东价: ￥69.00。
-券后价: ￥39.00。
-领券抢购: https://union-click.jd.com/jdc?d=oRMFwF';
+        $str = '🎁七夕好礼【照片定制充电宝】足一万毫安 大容量 不虚标💪创意模板 秀出个性 超薄小巧⚠ 新品冲量 
+
+【京东商城】喜乐猫 实用情侣充电宝 一万毫安 多模板可选 
+———————— 
+京东价：￥99 
+内购价：￥59 
+
+👉领券+下单：https://union-click.jd.com/jdc?d=WWJ9yu';
         $flag = strstr($str, 'jd.com');
         echo "flag:".$flag."<br>";
         if ($flag){
@@ -47,7 +50,8 @@ class Index extends Controller
                 if(strpos($hello[$index],'【京东商城】') !== false||strpos($hello[$index],'【京东】') !== false){
                     echo "sku_name:".$hello[$index];echo "</br>";
                     if ($hello[$index]){
-                        $tmp_goods = $goods->where('sku_name', $hello[$index]);
+                        $tmp_goods = $goods->where('sku_name', $hello[$index])->select();
+                        //echo $tmp_goods->sku_name;
                         if ($tmp_goods){
 
                             return '数据已存在';
@@ -72,7 +76,7 @@ class Index extends Controller
                     if (!$sku_id){
                         $sku_id = 0;
                     }else{
-                        $tmp_goods = $goods->where('sku_id', $sku_id);
+                        $tmp_goods = $goods->where('sku_id', $sku_id)->select();
                         if ($tmp_goods){
                             return '数据已存在';
                         }
