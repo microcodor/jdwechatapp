@@ -15,17 +15,51 @@ class Index extends Controller
 {
     public function index()
     {
+        $openId = session('openId');
+        Log::write("openId:".$openId,'notice');
 
-        return view('index');
+        return view('navdiy');
     }
     //snsapi_userinfo snsapi_base
     public function  main(){
+        //header('Location:http://baidu.com');
         $wechatUtil = new WechatUtil();
+        //snsapi_base   snsapi_userinfo
         $wechatUtil->web_auth("snsapi_userinfo",
             "http://wx.microcodor.com/wechat/index/auth_callback","http://wx.microcodor.com/index");
+        exit();
+
     }
     public function nav(){
         return view('navdiy');
+    }
+    public function redir(){
+        header("Location:http://baidu.com");
+        exit();
+    }
+
+    /**
+    * 获取首页数据
+     */
+    public function getTabData(){
+        $tabIndex = $_GET['tabIndex'];
+        $sortIndex = $_GET['sortIndex'];
+        $page = $_GET['curPage'];
+        $size= $_GET['pageSize'];
+        //dump("page:".$page);
+        //dump("size:".$size);
+        $goods = new Goods();
+        $defaultOrder = 'publish_date';
+        if ($tabIndex==0){
+            $defaultOrder = 'publish_date';
+        }else if ($tabIndex==1){
+            $defaultOrder = 'commission';
+        }else {
+            $defaultOrder = 'sell_price';
+        }
+
+        $list = $goods->where('end_date','GT',date('Y-m-d H:i:s', time()))->order($defaultOrder,$sortIndex)->limit($page*$size,$size)->select();
+        return json($list);
     }
 
     public function savedata(){

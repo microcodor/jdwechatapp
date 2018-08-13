@@ -122,10 +122,7 @@
               background-color: #fafafa;
               font-size: 14px;
           }
-          #monitor {
-              position: absolute;
-              left: 51%;
-          }
+
           #wrapper p{position:absolute; text-align:center; height:3rem; line-height:3rem; color:red; width:100%;}
 
           #wrapper p.p-2{bottom:0;}
@@ -151,6 +148,8 @@
               margin-top: 10px;
           }
           .jd-sell-price{
+              display: flex;
+              flex-direction: column;
               font-size: 12px;
               color: red;
               margin-top: 10px;
@@ -160,13 +159,13 @@
   <body ontouchstart  onload="loaded()">
   <div class="weui-navbar">
       <div href="#tab1" class="weui-navbar__item weui-bar__item_on">
-          选项一
+          按日期
       </div>
       <div href="#tab2" class="weui-navbar__item">
-          选项二
+          按佣金
       </div>
       <div href="#tab3" class="weui-navbar__item">
-          选项三
+          按价格
       </div>
   </div>
 
@@ -194,11 +193,13 @@
                       <div class="weui-cell__bd">
                           <div class="jd-title">花花公子正品，有防伪标签</div>
                           <div class="jd-price">京东价：¥198</div>
-                          <div class="jd-sell-price">内购价：¥89（券后）</div>
+                          <div class="jd-sell-price">
+                              <div>内购价：¥89（券后）</div>
+                              <div>佣金：20%</div>
+                          </div>
                       </div>
-                      <div class="weui-cell__ft"><a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_primary">一键推广</a></div>
+                      <div class="weui-cell__ft"><a href="javascript:pushsku(0);" class="weui-btn weui-btn_mini weui-btn_primary">一键推广</a></div>
                   </div>
-
               </div>
           </div>
           <p class="p-1">下拉刷新</p>
@@ -216,70 +217,119 @@
           capture: false,
           passive: false
       } : false);
+
+
+
       $(function(){
           var tabIndex = "#tab1";
+          var preSort1 = 'desc';
+          var preSort2 = 'desc';
+          var preSort3 = 'desc';
           console.log("default-tab:"+tabIndex);
           $('.weui-navbar__item').on('click', function () {
               $(this).addClass('weui-bar__item_on').siblings('.weui-bar__item_on').removeClass('weui-bar__item_on');
-              console.log(tabIndex==$(this).attr("href"));
-              if (tabIndex==$(this).attr("href")) {
-                  myScroll.scrollTo(0, 0);
+              console.log(tabIndex===$(this).attr("href"));
+              page = 0;
+              myScroll.scrollTo(0, 0);
+              if (tabIndex===$(this).attr("href")) {
+
+                  initData(getSwitchTabSort(tabIndex));
               }else{
                   tabIndex = $(this).attr("href");
-                  initData();
+                  initData(getCurTabSort(tabIndex));
               }
 
 
               $(tabIndex).show().siblings().hide();
 
           });
-          var index = 0;
+          var page = 0;
+          var size = 5;
           loaded();
-          initData();
+          initData(getCurTabSort(tabIndex));
 
           console.log("初始化数据："+myScroll.y + '&' + myScroll.maxScrollY);
           myScroll.on('scroll', refreshData);
           myScroll.on('scrollEnd', loadMore);
 
-          function initData(){
-              $('#scroller ul').empty();
-              for (var i = 0; i < 20; i++) {
-                  var li = '<li  class="link" id="'+i+'">'+tabIndex+'=Click me:'+i+'</li>';//onclick="item_click('+i+');"
-                  $('#scroller ul').append(li);
-              }
-              index = 20;
-              myScroll.refresh();
+          function initData(sortIndex){
+              console.log("initData");
+              $('.weui-cells').empty();
+              getdata(tabIndex,sortIndex, 0, size);
+              //
+              // index = 20;
+              // myScroll.refresh();
           }
           function refreshData(){
               console.log("refreshData:"+myScroll.y);
               if (myScroll.y>60) {
                   console.log("开始刷新数据");
-                  $('#scroller ul').empty();
-                  initData();
-                  myScroll.refresh();
+                  $('.weui-cells').empty();
+                  initData(getCurTabSort(tabIndex));
                   console.log("刷新数据完成");
               }
           }
           function loadMore () {
-              var currentIndex = tabIndex;
+              //var currentIndex = tabIndex;
               console.log(myScroll.y + '&' + myScroll.maxScrollY);
               if(myScroll.y <= myScroll.maxScrollY){
                   //position.innerHTML = this.y>>0;
                   console.log("滑动到最底部了");
-                  setTimeout(function(){
-                      console.log("返回数据："+(currentIndex===tabIndex));
-                      if (currentIndex===tabIndex) {
-                          for (var i = index; i < index+20; i++) {
-                              var li = '<li  class="link" id="'+i+'">'+tabIndex+'=Click me:'+i+'</li>';//onclick="item_click('+i+');"
-                              $('#scroller ul').append(li);
-                          }
-                          index = index+20;
-                          console.log("添加数据index:"+index);
-                          myScroll.refresh();
-                      }
-                  },1000);
-
+                  // setTimeout(function(){
+                  //     console.log("返回数据："+(currentIndex===tabIndex));
+                  //     if (currentIndex===tabIndex) {
+                  //         for (var i = index; i < index+20; i++) {
+                  //             var li = '<li  class="link" id="'+i+'">'+tabIndex+'=Click me:'+i+'</li>';//onclick="item_click('+i+');"
+                  //             $('.weui-cells').append(li);
+                  //         }
+                  //         index = index+20;
+                  //         console.log("添加数据index:"+index);
+                  //         myScroll.refresh();
+                  //     }
+                  // },1000);
+                  getdata(tabIndex,page+1,size);
               }
+          }
+
+          function getdata(curTabIndex,sortIndex, curPage, pageSize){
+              var index = 0;
+              if (curTabIndex==='#tab1'){
+                  index = 0;
+              } else if (curTabIndex==='#tab2'){
+                  index = 1;
+              }else {
+                  index = 2;
+              }
+              $.getJSON('index/getTabData', {'tabIndex': index, 'sortIndex':sortIndex, 'curPage':curPage, 'pageSize': pageSize}, function(data) {
+                  if (curTabIndex!==tabIndex) {
+                      getdata(tabIndex,sortIndex,0,size);
+                      return;
+                  }
+                  if (data===null||data.length===0) {
+                      console.log("no data");
+                      return;
+                  }
+                  console.log(data);
+                  for (var i = 0; i < data.length; i++) {
+                      var obj = data[i];
+                      console.log("initData:"+data[i]);
+                      var html = '<div class="weui-cell">\n' +
+                          '                      <div class="weui-cell__hd"><img src="'+obj.image+'" alt="" style="width:120px;margin-right:5px;display:block"></div>\n' +
+                          '                      <div class="weui-cell__bd">\n' +
+                          '                          <div class="jd-title">'+obj.sku_name+'</div>\n' +
+                          '                          <div class="jd-price">京东价：¥'+obj.price+'</div>\n' +
+                          '                          <div class="jd-sell-price">\n' +
+                          '                              <div>内购价：¥'+obj.sell_price+'（券后）</div>\n' +
+                          '                              <div>佣金：'+obj.commission+'%</div>\n' +
+                          '                          </div>\n' +
+                          '                      </div>\n' +
+                          '                      <div class="weui-cell__ft"><a href="javascript:pushsku('+obj.id+');" class="weui-btn weui-btn_mini weui-btn_primary">一键推广</a></div>\n' +
+                          '                  </div>';
+                      $('.weui-cells').append(html);
+                  }
+                  page = curPage;
+                  myScroll.refresh();
+              });
           }
           $('#scroller').on('click', 'ul li', function(event){
               var val=$(this).attr("id");
@@ -290,13 +340,37 @@
               console.log("button click:"+val);
               e.preventDefault();
           })
-      });
+          function getSwitchTabSort(curTabIndex){
+              if (curTabIndex==='#tab1'){
+                  preSort1 = preSort1==='desc'?'asc':'desc';
+                  return preSort1;
+              } else if (curTabIndex==='#tab2'){
+                  preSort2 = preSort2==='desc'?'asc':'desc';
+                  return preSort2;
+              }else {
+                  preSort3 = preSort3==='desc'?'asc':'desc';
+                  return preSort3;
+              }
+          }
+          function getCurTabSort(curTabIndex){
+              if (curTabIndex==='#tab1'){
+                  return preSort1;
+              } else if (curTabIndex==='#tab2'){
+                  return preSort2;
+              }else {
+                  return preSort3;
+              }
+          }
 
+      });
+      function pushsku(id) {
+          alert(id);
+      }
   </script>
 
             <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
     <script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
-
+  <script src="__STATIC__/js/example.js"></script>
 
 
   </body>

@@ -7,6 +7,7 @@
  */
 namespace app\wechat\controller;
 
+use app\index\model\User;
 use app\wechat\utils\Util;
 use app\wechat\utils\WechatUtil;
 use Gaoming13\WechatPhpSdk\Api;
@@ -233,7 +234,9 @@ class Index extends Controller {
         $api->create_menu($menu_json);
     }
 
-    // 网页授权回调地址：http://wx.microcodor.com/wechat/index/auth_callback
+    /**
+    *   网页授权回调地址：http://wx.microcodor.com/wechat/index/auth_callback
+     */
     public function auth_callback(){
         $cache =  new FileCache;
         // api模块
@@ -252,14 +255,61 @@ class Index extends Controller {
                 }
             )
         );
-        //snsapi_userinfo
-        list($err, $user_info) = $api->get_userinfo_by_authorize('snsapi_base');
+        //snsapi_userinfo  snsapi_base
+        list($err, $user_info) = $api->get_userinfo_by_authorize('snsapi_userinfo');
         if ($user_info !== null) {
-            var_dump($user_info);;
+            //将用户信息存在数据库中,同时将用户在数据库中唯一的标识保存在session中
+            $array = [];
+
+            $array['openId'] = $user_info['openid'];
+            $array['nickName'] = $user_info['nickname'];
+            $array['headImgUrl'] = $user_info['headimgurl'];
+
+            //我这里只存储了用户的openid,nickname,headimgurl
+            // $model = Model('user');
+
+            //$model->save();
+            $user = User::get($array['openId']);
+
+            //先判断用户数据是不是已经存储了，如果存储了获取用户在数据库中的唯一标识
+            //$user_id = $model->where(['openid'=>$array['openid']])->getField('user_id');
+            if($user){
+                session('openId',$user['openId']);
+            }else{
+                throw  new Exception("null");
+                $model = new User($array);
+                $model ->save();
+                //将用户在数据库中的唯一表示保存在session中
+                session('openId',$model['openId']);
+            }
+
+            //var_dump($user_info);
+            //Log::write('MsgType:'.$user_info,'log');.'?openid='.$user_info->openid
             header('Location:'.$_REQUEST['state']);
         } else {
             echo '授权失败！';
         }
+    }
+
+    public function getOpenId(){
+        // api模块 - 包含各种系统主动发起的功能
+        $cache =  new FileCache;
+        // api模块
+        $api = new Api(
+            array(
+                'appId' => config("appID"),
+                'appSecret' => config('appSecret'),
+                'get_access_token' => function() use ($cache) {
+                    // echo "\nget_access_token:".json_decode($cache->get('access_token'))->access_token;
+                    return json_decode($cache->get('access_token'))->access_token;
+                },
+                'save_access_token' => function($token) use ($cache) {
+                    //echo "\nsave_access_token:".$token;
+                    // 用户需要自己实现access_token的保存
+                    $cache->set('access_token', $token, 3600);
+                }
+            )
+        );
 
     }
 }

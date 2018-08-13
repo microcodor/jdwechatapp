@@ -47,7 +47,7 @@ class Index extends Controller
         $jsapi_config =  $api->get_jsapi_config($url);
         return json($jsapi_config);
     }
-
+    // 暂不使用
     public function auth(){
         //授权完跳转的网址
         $path = $_REQUEST['path'];

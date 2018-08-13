@@ -211,7 +211,8 @@ $(function () {
         };
 
         //$.getJSON('auth/index?&url=' + encodeURIComponent(location.href.split('#')[0]), function (res) {
-        $.getJSON('../public/auth/index', function (res) {
+        //http://localhost/jdwechatapp/public/auth/index
+        $.getJSON('http://wx.microcodor.com/auth/index', function (res) {
             console.log(res);
             wx.config({
                 beta: true,
