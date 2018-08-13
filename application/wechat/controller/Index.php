@@ -287,6 +287,7 @@ class Index extends Controller {
             //var_dump($user_info);
             //Log::write('MsgType:'.$user_info,'log');.'?openid='.$user_info->openid
             header('Location:'.$_REQUEST['state']);
+            exit();
         } else {
             echo '授权失败！';
         }
