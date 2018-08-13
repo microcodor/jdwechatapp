@@ -277,7 +277,7 @@ class Index extends Controller {
             if($user){
                 session('openId',$user['openId']);
             }else{
-                throw  new Exception("null");
+                //throw  new Exception("null");
                 $model = new User($array);
                 $model ->save();
                 //将用户在数据库中的唯一表示保存在session中
