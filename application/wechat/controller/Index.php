@@ -261,9 +261,9 @@ class Index extends Controller {
             //将用户信息存在数据库中,同时将用户在数据库中唯一的标识保存在session中
             $array = [];
 
-            $array['openId'] = $user_info['openid'];
-            $array['nickName'] = $user_info['nickname'];
-            $array['headImgUrl'] = $user_info['headimgurl'];
+            $array['openId'] = $user_info->openid;
+            $array['nickName'] = $user_info->nickname;
+            $array['headImgUrl'] = $user_info->headimgurl;
 
             //我这里只存储了用户的openid,nickname,headimgurl
             // $model = Model('user');
