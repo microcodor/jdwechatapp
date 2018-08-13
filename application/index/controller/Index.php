@@ -201,11 +201,11 @@ class Index extends Controller
 //        }
 
         //$user = User::get(323221122);
-        $data = ['openId' => '323221123', 'nickName' => 'jiwei','headImgUrl' => 'htttp://wx.microcodor.com'];
-        $user = new User($data);
+        //$data = ['openId' => '323221123', 'nickName' => 'jiwei','headImgUrl' => 'htttp://wx.microcodor.com'];
+        $user = new User();
         //$user->save();
-        $nickName = User::get(323221123)['nickName'];
-        echo $nickName;
+        $nickName = Goods::get(3)['sku_name'];
+        //echo $nickName;
         return "this is main page：".$nickName;
     }
     public function test_goods(){

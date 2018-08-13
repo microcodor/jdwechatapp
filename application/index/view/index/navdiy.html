@@ -300,13 +300,13 @@
               }else {
                   index = 2;
               }
-              $.getJSON('index/getTabData', {'tabIndex': index, 'sortIndex':sortIndex, 'curPage':curPage, 'pageSize': pageSize}, function(data) {
+              $.getJSON('http://wx.microcodor.com/index/index/getTabData', {'tabIndex': index, 'sortIndex':sortIndex, 'curPage':curPage, 'pageSize': pageSize}, function(data) {
                   if (curTabIndex!==tabIndex) {
                       getdata(tabIndex,sortIndex,0,size);
                       return;
                   }
                   if (data===null||data.length===0) {
-                      console.log("no data");
+                      console.log("no data");``
                       return;
                   }
                   console.log(data);
