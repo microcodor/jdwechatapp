@@ -28,16 +28,17 @@ class Index extends Controller
         // api模块
         $api = new Api(
             array(
-                'appId' => config("appID"),
-                'appSecret' => config('appSecret'),
-                'get_access_token' => function() use ($cache) {
-                   // echo "\nget_access_token:".json_decode($cache->get('access_token'))->access_token;
-                    return json_decode($cache->get('access_token'))->access_token;
+                'appId' => config('appID'),
+                'appSecret'	=> config('appSecret'),
+                'get_access_token' => function(){
+                    // 用户需要自己实现access_token的返回
+                    $wechatUtil = new WechatUtil();
+                    $access_token = $wechatUtil->get_access_token();
+                    return $access_token;
                 },
-                'save_access_token' => function($token) use ($cache) {
-                    //echo "\nsave_access_token:".$token;
+                'save_access_token' => function($token) {
                     // 用户需要自己实现access_token的保存
-                    $cache->set('access_token', $token, 3600);
+                    Cache::set("access_data",$token,7000);
                 }
             )
         );

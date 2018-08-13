@@ -22,6 +22,7 @@
  
 namespace Gaoming13\WechatPhpSdk;
 
+use Gaoming13\WechatPhpSdk\Utils\FileCache;
 use Gaoming13\WechatPhpSdk\Utils\HttpCurl;
 use Gaoming13\WechatPhpSdk\Utils\Error;
 use Gaoming13\WechatPhpSdk\Utils\SHA1;
@@ -2286,6 +2287,7 @@ class Api
      */
     public function get_userinfo_by_authorize($scope, $lang = 'zh_CN')
     {
+        //$cache =  new FileCache;
         if (isset($_GET['code']) && !empty($_GET['code'])) {
             $code = $_GET['code'];
             // 1. 通过code换取网页授权access_token
@@ -2298,6 +2300,7 @@ class Api
             }
             // 判断是否调用成功
             if (isset($res->access_token)) {
+                //$cache->set("js_access_token",);
                 if ($scope == 'snsapi_userinfo') {
                     // 2.1 `snsapi_userinfo` 继续通过access_token和openid拉取用户信息
                     $url = self::API_DOMAIN . 'sns/userinfo?access_token=' . $res->access_token .

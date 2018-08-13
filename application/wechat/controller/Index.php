@@ -13,6 +13,7 @@ use app\wechat\utils\WechatUtil;
 use Gaoming13\WechatPhpSdk\Api;
 use Gaoming13\WechatPhpSdk\Utils\FileCache;
 use Gaoming13\WechatPhpSdk\Wechat;
+use think\Cache;
 use think\Controller;
 use think\Exception;
 use think\Log;
@@ -47,20 +48,20 @@ class Index extends Controller {
             'encodingAESKey' =>	$encodingAESKey //可选
         ));
         // api模块 - 包含各种系统主动发起的功能
-        $cache =  new FileCache;
         // api模块
         $api = new Api(
             array(
-                'appId' => config("appID"),
-                'appSecret' => config('appSecret'),
-                'get_access_token' => function() use ($cache) {
-                    // echo "\nget_access_token:".json_decode($cache->get('access_token'))->access_token;
-                    return json_decode($cache->get('access_token'))->access_token;
+                'appId' => config('appID'),
+                'appSecret'	=> config('appSecret'),
+                'get_access_token' => function(){
+                    // 用户需要自己实现access_token的返回
+                    $wechatUtil = new WechatUtil();
+                    $access_token = $wechatUtil->get_access_token();
+                    return $access_token;
                 },
-                'save_access_token' => function($token) use ($cache) {
-                    //echo "\nsave_access_token:".$token;
+                'save_access_token' => function($token) {
                     // 用户需要自己实现access_token的保存
-                    $cache->set('access_token', $token, 3600);
+                    Cache::set("access_data",$token,7000);
                 }
             )
         );
@@ -195,7 +196,7 @@ class Index extends Controller {
                 },
                 'save_access_token' => function($token) {
                     // 用户需要自己实现access_token的保存
-                    echo 'wechat_token', $token;
+                    Cache::set("access_data",$token,7000);
                 }
             )
         );
@@ -239,20 +240,20 @@ class Index extends Controller {
     *   网页授权回调地址：http://wx.microcodor.com/wechat/index/auth_callback
      */
     public function auth_callback(){
-        $cache =  new FileCache;
         // api模块
         $api = new Api(
             array(
-                'appId' => config("appID"),
-                'appSecret' => config('appSecret'),
-                'get_access_token' => function() use ($cache) {
-                    // echo "\nget_access_token:".json_decode($cache->get('access_token'))->access_token;
-                    return json_decode($cache->get('access_token'))->access_token;
+                'appId' => config('appID'),
+                'appSecret'	=> config('appSecret'),
+                'get_access_token' => function(){
+                    // 用户需要自己实现access_token的返回
+                    $wechatUtil = new WechatUtil();
+                    $access_token = $wechatUtil->get_access_token();
+                    return $access_token;
                 },
-                'save_access_token' => function($token) use ($cache) {
-                    //echo "\nsave_access_token:".$token;
+                'save_access_token' => function($token) {
                     // 用户需要自己实现access_token的保存
-                    $cache->set('access_token', $token, 3600);
+                    Cache::set("access_data",$token,7000);
                 }
             )
         );
@@ -299,16 +300,17 @@ class Index extends Controller {
         // api模块
         $api = new Api(
             array(
-                'appId' => config("appID"),
-                'appSecret' => config('appSecret'),
-                'get_access_token' => function() use ($cache) {
-                    // echo "\nget_access_token:".json_decode($cache->get('access_token'))->access_token;
-                    return json_decode($cache->get('access_token'))->access_token;
+                'appId' => config('appID'),
+                'appSecret'	=> config('appSecret'),
+                'get_access_token' => function(){
+                    // 用户需要自己实现access_token的返回
+                    $wechatUtil = new WechatUtil();
+                    $access_token = $wechatUtil->get_access_token();
+                    return $access_token;
                 },
-                'save_access_token' => function($token) use ($cache) {
-                    //echo "\nsave_access_token:".$token;
+                'save_access_token' => function($token) {
                     // 用户需要自己实现access_token的保存
-                    $cache->set('access_token', $token, 3600);
+                    Cache::set("access_data",$token,7000);
                 }
             )
         );

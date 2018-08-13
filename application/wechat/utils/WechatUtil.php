@@ -34,7 +34,7 @@ class WechatUtil{
             $expires_time = intval($array["time"]) + intval($array["expires_in"]) - 100;
             $now = time();
             if($now < $expires_time)
-                return $array["access_token"];
+                return $json;
         }
         // 如果文件不存在或者token已经过期则向服务器请求
         $result = $this->http_get_result("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".config("appID")."&secret=".config("appSecret"));
@@ -47,13 +47,13 @@ class WechatUtil{
             //$json = json_encode($json);
             // 写入文件
             //$file = fopen($path, "wb");
-            Cache::set("access_data",json_encode($json),7000);
+            //Cache::set("access_data",json_encode($json),7000);
             //            if($file!==false) {
             //                fwrite($file, $json);
             //                fclose($file);
             //            }
             //echo "access_token的数据:".$json["access_token"];
-            return $json["access_token"];
+            return json_encode($json);
         }
         return false;
     }
