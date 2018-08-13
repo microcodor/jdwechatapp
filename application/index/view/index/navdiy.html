@@ -132,7 +132,7 @@
           }
           .weui-cell{
               display: flex;
-              height: 160px;
+              height: 120px;
               flex-direction: row;
           }
           .weui-cell__bd {
@@ -141,18 +141,49 @@
               align-content: center;
               margin-left: 6px;
           }
-          .jd-price{
+          .jd-title{
               font-size: 12px;
+              overflow: hidden;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+              word-break: break-all;
+              margin-top: 10px;
+          }
+          .jd-price{
+              font-size: 10px;
               color: gray;
               text-decoration:line-through;
-              margin-top: 10px;
+              margin-top: 5px;
           }
           .jd-sell-price{
               display: flex;
               flex-direction: column;
-              font-size: 12px;
+              font-size: 10px;
               color: red;
-              margin-top: 10px;
+          }
+          .jd-bottom{
+              display: flex;
+              flex-direction: row;
+              width: 100%;
+              position: relative;
+          }
+          .weui-cell__ft{
+              position:absolute;
+              right:0px;
+              float: right;
+          }
+          .weui-btn_push{
+              font-size: 10px !important;
+              background-color: #1AAD19;
+              box-sizing: border-box;
+              font-size: 18px;
+              text-align: center;
+              text-decoration: none;
+              color: #FFFFFF;
+              line-height: 2.55555556;
+              border-radius: 5px;
+              padding: 5px;
           }
       </style>
   </head>
@@ -189,16 +220,20 @@
               </ul> -->
               <div class="weui-cells">
                   <div class="weui-cell">
-                      <div class="weui-cell__hd"><img src="https://img14.360buyimg.com/n0/jfs/t21235/25/2215358474/458789/b2b86e63/5b4c445dNf383b504.jpg" alt="" style="width:120px;margin-right:5px;display:block"></div>
+                      <div class="weui-cell__hd"><img src="https://img14.360buyimg.com/n0/jfs/t21235/25/2215358474/458789/b2b86e63/5b4c445dNf383b504.jpg" alt="" style="width:100px;margin-right:5px;display:block"></div>
                       <div class="weui-cell__bd">
-                          <div class="jd-title">花花公子正品，有防伪标签</div>
+                          <div class="jd-title">花花公子正品，有防伪标签花花公子正品有防伪标签花花公子正品，有防伪标签花花公子正品，有防伪标签</div>
                           <div class="jd-price">京东价：¥198</div>
-                          <div class="jd-sell-price">
-                              <div>内购价：¥89（券后）</div>
-                              <div>佣金：20%</div>
+                          <div class="jd-bottom">
+                              <div class="jd-sell-price">
+                                  <div>内购价：¥89（券后）</div>
+                                  <div>佣金：20%</div>
+                              </div>
+                              <div class="weui-cell__ft"><a href="javascript:pushsku(0);" class="weui-btn_push">一键推广</a></div>
+
                           </div>
+
                       </div>
-                      <div class="weui-cell__ft"><a href="javascript:pushsku(0);" class="weui-btn weui-btn_mini weui-btn_primary">一键推广</a></div>
                   </div>
               </div>
           </div>
@@ -300,7 +335,8 @@
               }else {
                   index = 2;
               }
-              $.getJSON('http://wx.microcodor.com/index/index/getTabData', {'tabIndex': index, 'sortIndex':sortIndex, 'curPage':curPage, 'pageSize': pageSize}, function(data) {
+              //http://wx.microcodor.com/index/index/getTabData
+              $.getJSON('index/getTabData', {'tabIndex': index, 'sortIndex':sortIndex, 'curPage':curPage, 'pageSize': pageSize}, function(data) {
                   if (curTabIndex!==tabIndex) {
                       getdata(tabIndex,sortIndex,0,size);
                       return;
@@ -314,17 +350,33 @@
                       var obj = data[i];
                       console.log("initData:"+data[i]);
                       var html = '<div class="weui-cell">\n' +
-                          '                      <div class="weui-cell__hd"><img src="'+obj.image+'" alt="" style="width:120px;margin-right:5px;display:block"></div>\n' +
+                          '                      <div class="weui-cell__hd"><img src="'+obj.image+'" alt="" style="width:100px;margin-right:5px;display:block"></div>\n' +
                           '                      <div class="weui-cell__bd">\n' +
                           '                          <div class="jd-title">'+obj.sku_name+'</div>\n' +
                           '                          <div class="jd-price">京东价：¥'+obj.price+'</div>\n' +
-                          '                          <div class="jd-sell-price">\n' +
-                          '                              <div>内购价：¥'+obj.sell_price+'（券后）</div>\n' +
-                          '                              <div>佣金：'+obj.commission+'%</div>\n' +
+                          '                          <div class="jd-bottom">\n' +
+                          '                              <div class="jd-sell-price">\n' +
+                          '                                  <div>内购价：¥'+obj.sell_price+'</div>\n' +
+                          '                                  <div>佣金：'+obj.commission+'%</div>\n' +
+                          '                              </div>\n' +
+                          '                              <div class="weui-cell__ft"><a href="javascript:pushsku('+obj.id+');" class="weui-btn_push">一键推广</a></div>\n' +
+                          '\n' +
                           '                          </div>\n' +
+                          '\n' +
                           '                      </div>\n' +
-                          '                      <div class="weui-cell__ft"><a href="javascript:pushsku('+obj.id+');" class="weui-btn weui-btn_mini weui-btn_primary">一键推广</a></div>\n' +
                           '                  </div>';
+                      // var html = '<div class="weui-cell">\n' +
+                      //     '                      <div class="weui-cell__hd"><img src="'+obj.image+'" alt="" style="width:80px;margin-right:5px;display:block"></div>\n' +
+                      //     '                      <div class="weui-cell__bd">\n' +
+                      //     '                          <div class="jd-title">'+obj.sku_name+'</div>\n' +
+                      //     '                          <div class="jd-price">京东价：¥'+obj.price+'</div>\n' +
+                      //     '                          <div class="jd-sell-price">\n' +
+                      //     '                              <div>内购价：¥'+obj.sell_price+'（券后）</div>\n' +
+                      //     '                              <div>佣金：'+obj.commission+'%</div>\n' +
+                      //     '                          </div>\n' +
+                      //     '                      </div>\n' +
+                      //     '                      <div class="weui-cell__ft"><a href="javascript:pushsku('+obj.id+');" class="weui-btn weui-btn_mini weui-btn_primary">一键推广</a></div>\n' +
+                      //     '                  </div>';
                       $('.weui-cells').append(html);
                   }
                   page = curPage;
