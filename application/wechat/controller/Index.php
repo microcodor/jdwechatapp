@@ -14,6 +14,7 @@ use Gaoming13\WechatPhpSdk\Api;
 use Gaoming13\WechatPhpSdk\Utils\FileCache;
 use Gaoming13\WechatPhpSdk\Wechat;
 use think\Controller;
+use think\Exception;
 use think\Log;
 
 
