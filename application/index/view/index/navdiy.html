@@ -336,7 +336,7 @@
                   index = 2;
               }
               //http://wx.microcodor.com/index/index/getTabData
-              $.getJSON('index/getTabData', {'tabIndex': index, 'sortIndex':sortIndex, 'curPage':curPage, 'pageSize': pageSize}, function(data) {
+              $.getJSON('http://wx.microcodor.com/index/index/getTabData', {'tabIndex': index, 'sortIndex':sortIndex, 'curPage':curPage, 'pageSize': pageSize}, function(data) {
                   if (curTabIndex!==tabIndex) {
                       getdata(tabIndex,sortIndex,0,size);
                       return;
