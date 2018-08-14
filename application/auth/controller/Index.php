@@ -19,10 +19,12 @@ class Index extends Controller
     //jssdk授权前信息获取
     public function index()
     {
+        $url = $_GET['url'];
+        //echo $url;
         $wechatUtil = new WechatUtil();
         // 注意 URL 一定要动态获取，不能 hardcode.
-        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-        $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+//        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+//        $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         $jsapi_config =  $wechatUtil->api->get_jsapi_config($url);
         return json($jsapi_config);
     }

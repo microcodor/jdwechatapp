@@ -213,10 +213,11 @@ $(function () {
             link: "https://weui.io",
             imgUrl: 'https://mmbiz.qpic.cn/mmemoticon/ajNVdqHZLLA16apETUPXh9Q5GLpSic7lGuiaic0jqMt4UY8P4KHSBpEWgM7uMlbxxnVR7596b3NPjUfwg7cFbfCtA/0'
         };
-
+        var url =location.href.split('#')[0];
+        console.log("url:"+url);
         //$.getJSON('auth/index?&url=' + encodeURIComponent(location.href.split('#')[0]), function (res) {
         //http://localhost/jdwechatapp/public/auth/index
-        $.getJSON('http://wx.microcodor.com/auth/index', function (res) {
+        $.getJSON('http://wx.microcodor.com/auth/index',{"url": url}, function (res) {
             console.log(res);
             wx.config({
                 beta: true,
