@@ -43,7 +43,17 @@ class WechatUtil{
                     'save_access_token' => function($token) {
                         // 用户需要自己实现access_token的保存
                         Cache::set("access_data",$token,7000);
-                    }
+                    },
+                    'get_jsapi_ticket' => function(){
+                        // 用户需要自己实现access_token的返回
+                        //$wechatUtil = new WechatUtil();
+                        $ticket = $this->jsapi_ticket();
+                        return $ticket;
+                    },
+                    'save_jsapi_ticket' => function($ticket) {
+                        // 用户需要自己实现access_token的保存
+                        Cache::set("jsapi_ticket",$ticket,7000);
+                    },
                 )
             );
         }
@@ -73,6 +83,44 @@ class WechatUtil{
         }
         // 如果文件不存在或者token已经过期则向服务器请求
         $result = $this->http_get_result("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".config("appID")."&secret=".config("appSecret"));
+        if($result) {
+            $json = json_decode($result, true);
+            //echo "expires_in上还是：".$json["expires_in"];
+            if(!$json || isset($json['errcode']))
+                return false;
+            $json["time"] = time();
+            //$json = json_encode($json);
+            // 写入文件
+            //$file = fopen($path, "wb");
+            //Cache::set("access_data",json_encode($json),7000);
+            //            if($file!==false) {
+            //                fwrite($file, $json);
+            //                fclose($file);
+            //            }
+            //echo "access_token的数据:".$json["access_token"];
+            return json_encode($json);
+        }
+        return false;
+    }
+    /**
+     * JS-SDK 获取jsapi_ticket
+     *
+     * @return string $ticket
+     */
+    public function get_jsapi_ticket()
+    {
+        $ticket = Cache::get('jsapi_ticket');
+        if ($ticket){
+            // $json = file_get_contents($path);
+            if(!isset($ticket['ticket']) || !isset($ticket['time']) || !isset($ticket['expires_in']))
+                return false;
+            $array = json_decode($ticket, true);
+            $expires_time = intval($array["time"]) + intval($array["expires_in"]) - 100;
+            $now = time();
+            if($now < $expires_time)
+                return $ticket;
+        }
+        $result = $this->http_get_result("https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" . $this->get_access_token() . "&type=jsapi");
         if($result) {
             $json = json_decode($result, true);
             //echo "expires_in上还是：".$json["expires_in"];
