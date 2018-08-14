@@ -308,7 +308,13 @@ $(function () {
             title: 'WeUI, 为微信 Web 服务量身设计',
             desc: 'WeUI, 为微信 Web 服务量身设计',
             link: "https://weui.io",
-            imgUrl: 'https://mmbiz.qpic.cn/mmemoticon/ajNVdqHZLLA16apETUPXh9Q5GLpSic7lGuiaic0jqMt4UY8P4KHSBpEWgM7uMlbxxnVR7596b3NPjUfwg7cFbfCtA/0'
+            imgUrl: 'https://mmbiz.qpic.cn/mmemoticon/ajNVdqHZLLA16apETUPXh9Q5GLpSic7lGuiaic0jqMt4UY8P4KHSBpEWgM7uMlbxxnVR7596b3NPjUfwg7cFbfCtA/0',
+            success: function () {
+                console.log('分享成功');
+            },
+            cancel: function () {
+                console.log('分享失败');
+            }
         };
         wx.onMenuShareTimeline(option);
     }
