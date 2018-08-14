@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <title>详情页</title>
+    <link rel="stylesheet" href="__STATIC__/css/weui.css"/>
+    <link rel="stylesheet" href="__STATIC__/css/example.css"/>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+
+    <![endif]-->
+    <style type="text/css">
+        .content{
+            display: flex;
+            flex-direction: column;
+
+        }
+        .view-img{
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            align-items: center;
+        }
+        .goods-img{
+            height: 240px;
+        }
+        .jd-info{
+            display: flex;
+            flex-direction: column;
+            margin: 10px;
+        }
+        .jd-title{
+            color: #0D0D0D;
+            font-size: 12px;
+        }
+        .jd-price{
+            font-size: 10px;
+            color: gray;
+            text-decoration:line-through;
+        }
+        .jd-sell-price {
+            color: red;
+            font-size: 10px;
+        }
+        .jd-commission {
+            color: red;
+            font-size: 10px;
+        }
+
+
+    </style>
+</head>
+<body ontouchstart>
+<div class="container" id="container">
+    <div class="content">
+        <div class="view-img">
+            <img src="{$goods->image}" class="goods-img">
+        </div>
+
+        <div class="jd-info">
+            <div class="jd-title">{$goods->sku_name}</div>
+            <div class="jd-bottom">
+                <div class="jd-price">京东价：¥198</div>
+                <div class="jd-sell-price">内购价：¥89（券后）</div>
+                <div class="jd-commission">佣金：20%</div>
+
+            </div>
+        </div>
+        <div class="page__bd page__bd_spacing">
+        <a href="javascript:pushsku({$goods->id});" class="weui-btn weui-btn_primary">一键推广</a>
+        <a href="#" id="share-friend" class="weui-btn weui-btn_primary">分享</a>
+        </div>
+    </div>
+</div>
+
+<script src="__STATIC__/js/zepto.min.js"></script>
+<script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="__STATIC__/js/example.js"></script>
+<script type="text/javascript">
+    $(function () {
+
+    })
+</script>
+</body>
+</html>

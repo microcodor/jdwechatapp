@@ -8,9 +8,6 @@
 namespace app\auth\controller;
 use app\index\model\User;
 use app\wechat\utils\WechatUtil;
-use Gaoming13\WechatPhpSdk\Api;
-use Gaoming13\WechatPhpSdk\Utils\FileCache;
-use think\Cache;
 use think\Controller;
 use think\Exception;
 
@@ -22,30 +19,11 @@ class Index extends Controller
     //jssdk授权前信息获取
     public function index()
     {
-
-        $cache =  new FileCache;
-
-        // api模块
-        $api = new Api(
-            array(
-                'appId' => config('appID'),
-                'appSecret'	=> config('appSecret'),
-                'get_access_token' => function(){
-                    // 用户需要自己实现access_token的返回
-                    $wechatUtil = new WechatUtil();
-                    $access_token = $wechatUtil->get_access_token();
-                    return $access_token;
-                },
-                'save_access_token' => function($token) {
-                    // 用户需要自己实现access_token的保存
-                    Cache::set("access_data",$token,7000);
-                }
-            )
-        );
+        $wechatUtil = new WechatUtil();
         // 注意 URL 一定要动态获取，不能 hardcode.
         $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
         $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-        $jsapi_config =  $api->get_jsapi_config($url);
+        $jsapi_config =  $wechatUtil->api->get_jsapi_config($url);
         return json($jsapi_config);
     }
     // 暂不使用

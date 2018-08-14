@@ -19,7 +19,7 @@ return [
     // 用户名
     'username'        => 'root',
     // 密码
-    ///'password'        => 'jinchun123',
+    //'password'        => 'jinchun123',
     //正式数据库
     'password'        => 'root',
     // 端口

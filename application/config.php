@@ -240,6 +240,7 @@ return [
     'appID'=>'wxd92439ed67f18c2a',
     'appSecret'=>'711da457037ce5073af0689dd3ba8dbd',
     'token'=>'jdwechatapp',
+    'encodingAESKey' => '072vHYArTp33eFwznlSvTRvuyOTe5YME1vxSoyZbzaV',
 
     // 视图输出字符串内容替换
     'view_replace_str'       => [

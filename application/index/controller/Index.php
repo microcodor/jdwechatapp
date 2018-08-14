@@ -8,18 +8,23 @@ use app\wechat\utils\WechatUtil;
 use think\Controller;
 use think\db;
 use app\wechat\utils\Util;
+use think\Exception;
 use think\Log;
 
 
 class Index extends Controller
 {
+    /**
+     * 重定向后真实菜单首页
+     */
     public function index()
     {
-        $openId = session('openId');
-        Log::write("openId:".$openId,'notice');
 
         return view('navdiy');
     }
+    /**
+    * 菜单首页设置
+     */
     //snsapi_userinfo snsapi_base
     public function  main(){
         //header('Location:http://baidu.com');
@@ -30,8 +35,43 @@ class Index extends Controller
         exit();
 
     }
+    /**
+     * 详情页
+     */
+    public function detail(){
+        $id = $_GET['id'];
+        //echo $id;
+        $goods = Goods::get($id);
+        if (!$goods){
+
+        }
+        //echo $goods['id'];
+        //var_dump($goods['id']);
+        $this->assign('goods', $goods);
+        return $this->view->fetch();
+    }
+    /**
+     * 主动推送消息
+     */
+    public function push(){
+        $id = $_GET['id'];
+        //echo "id:".$id;
+        $openId = session('openId');
+        Log::write("openId:".$openId,'notice');
+        $wechatUtil = new WechatUtil();
+        if ($openId){
+            // 主动发送
+            $res = $wechatUtil->api->send($openId, '主动推送一条消息');
+            if ($res){
+                return json(array('result'=>true));
+            }
+        }
+        return json(array('result'=>false));
+    }
+
+
     public function nav(){
-        return view('navdiy');
+        return view('main');
     }
     public function redir(){
         header("Location:http://baidu.com");

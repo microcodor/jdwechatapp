@@ -3,6 +3,10 @@
  * Modified by bear on 2016/9/7.
  */
 $(function () {
+    $('#share-friend').on('click', function () {
+        console.log("share-friend")
+        pushshare(0);
+    });
     var pageManager = {
         $container: $('#container'),
         _pageStack: [],
@@ -297,4 +301,18 @@ $(function () {
         };
     }
     init();
+
+    function pushshare(index) {
+        var option = {
+            title: 'WeUI, 为微信 Web 服务量身设计',
+            desc: 'WeUI, 为微信 Web 服务量身设计',
+            link: "https://weui.io",
+            imgUrl: 'https://mmbiz.qpic.cn/mmemoticon/ajNVdqHZLLA16apETUPXh9Q5GLpSic7lGuiaic0jqMt4UY8P4KHSBpEWgM7uMlbxxnVR7596b3NPjUfwg7cFbfCtA/0'
+        };
+        wx.onMenuShareTimeline(option);
+    }
 });
+function pushsku(id) {
+    alert(id);
+    
+}

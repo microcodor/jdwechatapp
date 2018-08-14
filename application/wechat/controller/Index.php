@@ -30,44 +30,34 @@ class Index extends Controller {
             'prefix'=>'think',
             'expire'=>0
         );
-
-        // 开发者中心-配置项-AppID(应用ID)
-        $appId = 'wxd92439ed67f18c2a';
-        // 开发者中心-配置项-AppSecret(应用密钥)
-        $appSecret = '711da457037ce5073af0689dd3ba8dbd';
-        // 开发者中心-配置项-服务器配置-Token(令牌)
-        $token = 'jdwechatapp';
-        // 开发者中心-配置项-服务器配置-EncodingAESKey(消息加解密密钥)
-        $encodingAESKey = '072vHYArTp33eFwznlSvTRvuyOTe5YME1vxSoyZbzaV';
-
+        $wechatUtil = new WechatUtil();
         // wechat模块 - 处理用户发送的消息和回复消息
-
-        $wechat = new Wechat(array(
-            'appId' => $appId,
-            'token' => 	$token,
-            'encodingAESKey' =>	$encodingAESKey //可选
-        ));
-        // api模块 - 包含各种系统主动发起的功能
-        // api模块
-        $api = new Api(
-            array(
-                'appId' => config('appID'),
-                'appSecret'	=> config('appSecret'),
-                'get_access_token' => function(){
-                    // 用户需要自己实现access_token的返回
-                    $wechatUtil = new WechatUtil();
-                    $access_token = $wechatUtil->get_access_token();
-                    return $access_token;
-                },
-                'save_access_token' => function($token) {
-                    // 用户需要自己实现access_token的保存
-                    Cache::set("access_data",$token,7000);
-                }
-            )
-        );
+//        $wechat = new Wechat(array(
+//            'appId' => config('appID'),
+//            'token' => 	config('token'),
+//            'encodingAESKey' =>	config('encodingAESKey') //可选
+//        ));
+//        // api模块 - 包含各种系统主动发起的功能
+//        // api模块
+//        $api = new Api(
+//            array(
+//                'appId' => config('appID'),
+//                'appSecret'	=> config('appSecret'),
+//                'get_access_token' => function(){
+//                    // 用户需要自己实现access_token的返回
+//                    $wechatUtil = new WechatUtil();
+//                    $access_token = $wechatUtil->get_access_token();
+//                    return $access_token;
+//                },
+//                'save_access_token' => function($token) {
+//                    // 用户需要自己实现access_token的保存
+//                    Cache::set("access_data",$token,7000);
+//                }
+//            )
+//        );
 
         // 获取微信消息
-        $msg = $wechat->serve();
+        $msg = $wechatUtil->wechat->serve();
 
         // 默认消息
         $default_msg = "/微笑  欢迎关注本测试号:\n 回复1: 回复文本消息\n 回复2: 回复图片消息\n 回复3: 回复语音消息\n 回复4: 回复视频消息\n 回复5: 回复音乐消息\n 回复6: 回复图文消息";
@@ -76,14 +66,14 @@ class Index extends Controller {
         // 用户关注微信号后 - 回复用户普通文本消息
         if ($msg->MsgType == 'event' && $msg->Event == 'subscribe') {
 
-            $wechat->reply($default_msg);
+            $wechatUtil->wechat->reply($default_msg);
             exit();
         }
 
         // 用户回复1 - 回复文本消息
         if ($msg->MsgType == 'text' && $msg->Content == '1') {
             Log::write($msg->Content,'notice');
-            $wechat->reply("hello world!");
+            $wechatUtil->wechat->reply("hello world!");
             /* 也可使用这种数组方式回复
             $wechat->reply(array(
                 'type' => 'text',
@@ -95,7 +85,7 @@ class Index extends Controller {
 
         // 用户回复2 - 回复图片消息
         if ($msg->MsgType == 'text' && $msg->Content == '2') {
-            $wechat->reply(array(
+            $wechatUtil->wechat->reply(array(
                 'type' => 'image',
                 // 通过素材管理接口上传多媒体文件，得到的id
                 'media_id' => 'Uq7OczuEGEyUu--dYjg7seTm-EJTa0Zj7UDP9zUGNkVpjcEHhl7tU2Mv8mFRiLKC'
@@ -106,7 +96,7 @@ class Index extends Controller {
         // 用户回复3 - 回复语音消息
         if ($msg->MsgType == 'text' && $msg->Content == '3') {
 
-            $wechat->reply(array(
+            $wechatUtil->wechat->reply(array(
                 'type' => 'voice',
                 // 通过素材管理接口上传多媒体文件，得到的id
                 'media_id' => 'rVT43tfDwjh4p1BV2gJ5D7Zl2BswChO5L_llmlphLaTPytcGcguBAEJ1qK4cg4r_'
@@ -117,7 +107,7 @@ class Index extends Controller {
         // 用户回复4 - 回复视频消息
         if ($msg->MsgType == 'text' && $msg->Content == '4') {
 
-            $wechat->reply(array(
+            $wechatUtil->wechat->reply(array(
                 'type' => 'video',
                 // 通过素材管理接口上传多媒体文件，得到的id
                 'media_id' => 'yV0l71NL0wtpRA8OMX0-dBRQsMVyt3fspPUzurIS3psi6eWOrb_WlEeO39jasoZ8',
@@ -130,7 +120,7 @@ class Index extends Controller {
         // 用户回复5 - 回复音乐消息
         if ($msg->MsgType == 'text' && $msg->Content == '5') {
 
-            $wechat->reply(array(
+            $wechatUtil->wechat->reply(array(
                 'type' => 'music',
                 'title' => '音乐标题',						//可选
                 'description' => '音乐描述',				//可选
@@ -144,7 +134,7 @@ class Index extends Controller {
         // 用户回复6 - 回复图文消息
         if ($msg->MsgType == 'text' && $msg->Content == '6') {
 
-            $wechat->reply(array(
+            $wechatUtil->wechat->reply(array(
                 'type' => 'news',
                 'articles' => array(
                     array(
@@ -172,15 +162,14 @@ class Index extends Controller {
         if ($msg->MsgType == 'text' && strpos($msg->Content,'http') !== false){
             $resMsg = Util::save_data($msg->Content);
             Log::write($resMsg,'notice');
-            $wechat->reply($resMsg);
+            $wechatUtil->wechat->reply($resMsg);
             exit();
         }
 
         // 默认回复默认信息
-        $wechat->reply($default_msg);
+        $wechatUtil->wechat->reply($default_msg);
 
-        // 主动发送
-        $api->send($msg->FromUserName, '这是我主动发送的一条消息');
+
     }
     public function createMenu(){
         // api模块 - 包含各种系统主动发起的功能

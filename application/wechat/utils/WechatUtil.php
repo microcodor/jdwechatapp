@@ -9,10 +9,45 @@
 namespace app\wechat\utils;
 
 use Gaoming13\WechatPhpSdk\Api;
-use Gaoming13\WechatPhpSdk\Utils\FileCache;
+use Gaoming13\WechatPhpSdk\Wechat;
 use think\Cache;
 
+
+
 class WechatUtil{
+    public $wechat;
+    public $api;
+    function __construct(){
+        //echo '__construct';
+        if (!$this->wechat){
+            // wechat模块 - 处理用户发送的消息和回复消息
+            $this->wechat = new Wechat(array(
+                'appId' => config('appID'),
+                'token' => 	config('token'),
+                'encodingAESKey' =>	config('encodingAESKey') //可选
+            ));
+        }
+        if (!$this->api){
+            // api模块 - 包含各种系统主动发起的功能
+            // api模块
+            $this->api = new Api(
+                array(
+                    'appId' => config('appID'),
+                    'appSecret'	=> config('appSecret'),
+                    'get_access_token' => function(){
+                        // 用户需要自己实现access_token的返回
+                        //$wechatUtil = new WechatUtil();
+                        $access_token = $this->get_access_token();
+                        return $access_token;
+                    },
+                    'save_access_token' => function($token) {
+                        // 用户需要自己实现access_token的保存
+                        Cache::set("access_data",$token,7000);
+                    }
+                )
+            );
+        }
+    }
     /**
      *  获取token，使用文件缓存机制
      *  首先检查文件是否存在，存在则检查token是否过期
@@ -62,25 +97,7 @@ class WechatUtil{
     *  微信网页授权
      */
     public function web_auth($auth_type,$callback_url,$main_url){
-        $cache =  new FileCache;
-
-        // api模块
-        $api = new Api(
-            array(
-                'appId' => config("appID"),
-                'appSecret' => config('appSecret'),
-                'get_access_token' => function() use ($cache) {
-                    // echo "\nget_access_token:".json_decode($cache->get('access_token'))->access_token;
-                    return json_decode($cache->get('access_token'))->access_token;
-                },
-                'save_access_token' => function($token) use ($cache) {
-                    //echo "\nsave_access_token:".$token;
-                    // 用户需要自己实现access_token的保存
-                    $cache->set('access_token', $token, 3600);
-                }
-            )
-        );
-        $path = $api->get_authorize_url($auth_type, $callback_url,$main_url);
+        $path = $this->api->get_authorize_url($auth_type, $callback_url,$main_url);
         header('Location:'.$path);
     }
 

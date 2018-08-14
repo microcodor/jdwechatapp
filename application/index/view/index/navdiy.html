@@ -242,6 +242,23 @@
       </div>
 
   </div>
+  <!--BEGIN toast-->
+  <div id="toast" style="display: none;">
+      <div class="weui-mask_transparent"></div>
+      <div class="weui-toast">
+          <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+          <p class="weui-toast__content">已完成</p>
+      </div>
+  </div>
+  <!--end toast-->
+  <!-- loading toast -->
+  <div id="loadingToast" style="display:none;">
+      <div class="weui-mask_transparent"></div>
+      <div class="weui-toast">
+          <i class="weui-loading weui-icon_toast"></i>
+          <p class="weui-toast__content">数据推送中</p>
+      </div>
+  </div>
 
   <script type="text/javascript">
       var myScroll;
@@ -322,7 +339,7 @@
                   //         myScroll.refresh();
                   //     }
                   // },1000);
-                  getdata(tabIndex,page+1,size);
+                  getdata(tabIndex,getCurTabSort(tabIndex),page+1,size);
               }
           }
 
@@ -337,19 +354,21 @@
               }
               //http://wx.microcodor.com/index/index/getTabData
               $.getJSON('http://wx.microcodor.com/index/index/getTabData', {'tabIndex': index, 'sortIndex':sortIndex, 'curPage':curPage, 'pageSize': pageSize}, function(data) {
+                  console.log('tabIndex:'+index+',sortIndex:'+sortIndex+',curPage:'+curPage+',pageSize:'+ pageSize);
                   if (curTabIndex!==tabIndex) {
                       getdata(tabIndex,sortIndex,0,size);
                       return;
                   }
                   if (data===null||data.length===0) {
-                      console.log("no data");``
+                      console.log("no data");
                       return;
                   }
                   console.log(data);
+                  console.log(data.length);
                   for (var i = 0; i < data.length; i++) {
                       var obj = data[i];
-                      console.log("initData:"+data[i]);
-                      var html = '<div class="weui-cell">\n' +
+
+                      var html = '<div class="weui-cell" id="'+obj.id+'">\n' +
                           '                      <div class="weui-cell__hd"><img src="'+obj.image+'" alt="" style="width:100px;margin-right:5px;display:block"></div>\n' +
                           '                      <div class="weui-cell__bd">\n' +
                           '                          <div class="jd-title">'+obj.sku_name+'</div>\n' +
@@ -359,7 +378,7 @@
                           '                                  <div>内购价：¥'+obj.sell_price+'</div>\n' +
                           '                                  <div>佣金：'+obj.commission+'%</div>\n' +
                           '                              </div>\n' +
-                          '                              <div class="weui-cell__ft"><a href="javascript:pushsku('+obj.id+');" class="weui-btn_push">一键推广</a></div>\n' +
+                          '                              <div class="weui-cell__ft"><a href="javascript:void(0)" id="'+obj.id+'" class="weui-btn_push">一键推广</a></div>\n' +
                           '\n' +
                           '                          </div>\n' +
                           '\n' +
@@ -383,13 +402,55 @@
                   myScroll.refresh();
               });
           }
-          $('#scroller').on('click', 'ul li', function(event){
+          $('#scroller').on('click', '.weui-cells .weui-cell', function(event){
               var val=$(this).attr("id");
               console.log("click:"+val);
+              window.location.href = "index/detail?id="+val;
           })
-          $('#scroller').on('touchend', 'li button', function(e){
+          var $loadingToast = $('#loadingToast');
+          var $toast = $('#toast');
+          function showLoading(){
+              if ($loadingToast.css('display') != 'none') return;
+
+              $loadingToast.fadeIn(100);
+          }
+          function hideLoading(){
+              setTimeout(function () {
+                  $loadingToast.fadeOut(100);
+              }, 500);
+          }
+          function showToast(){
+              if ($toast.css('display') != 'none') return;
+
+              $toast.fadeIn(100);
+              setTimeout(function () {
+                  $toast.fadeOut(100);
+              }, 2000);
+          }
+
+
+          $('.weui-cells').on('touchend', '.weui-cell .weui-btn_push', function(e){
               var val=$(this).attr("id");
               console.log("button click:"+val);
+              showLoading();
+              $.ajax({
+                  type: "GET",
+                  url: "http://wx.microcodor.com/index/index/push",
+                  data: {id:val},
+                  dataType: "json",
+                  success: function(data){
+                      console.log(data);
+                      hideLoading();
+                      if (data.result){
+                          showToast();
+                      }
+                  },
+                  error: function () {
+                      hideLoading();
+
+                  }
+              });
+
               e.preventDefault();
           })
           function getSwitchTabSort(curTabIndex){
@@ -415,9 +476,6 @@
           }
 
       });
-      function pushsku(id) {
-          alert(id);
-      }
   </script>
 
             <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
