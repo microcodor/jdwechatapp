@@ -47,7 +47,7 @@ class WechatUtil{
                     'get_jsapi_ticket' => function(){
                         // 用户需要自己实现access_token的返回
                         //$wechatUtil = new WechatUtil();
-                        $ticket = $this->jsapi_ticket();
+                        $ticket = $this->get_jsapi_ticket();
                         return $ticket;
                     },
                     'save_jsapi_ticket' => function($ticket) {
