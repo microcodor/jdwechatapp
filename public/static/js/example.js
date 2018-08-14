@@ -237,7 +237,7 @@ $(function () {
                 if (url.indexOf('detail')>=0) {
                     var title = $('.jd-title').text();
                     var id = $('#push-goods').attr('goods-id');
-                    var imgUrl = $('.goods-img').src;
+                    var imgUrl = $('.goods-img')[0].src;
                     console.log('title:'+title);
                     console.log('id:'+id);
                     console.log('imgUrl:'+imgUrl);
