@@ -3,10 +3,7 @@
  * Modified by bear on 2016/9/7.
  */
 $(function () {
-    $('#share-friend').on('click', function () {
-        console.log("share-friend")
-        pushshare(0);
-    });
+
     var pageManager = {
         $container: $('#container'),
         _pageStack: [],
@@ -302,7 +299,27 @@ $(function () {
         };
     }
     init();
-
+    $('#share-friend').on('click', function () {
+        var val=$(this).attr("goods-id");
+        var name = $(this).attr("sku-name");
+        var option = {
+            //imgUrl: '', // 分享图标
+            //type: '', // 分享类型,music、video或link，不填默认为link
+            //dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            title: name,
+            desc: name,
+            link: "http://wx.microcodor.com/index/index/detail?id="+val,
+            imgUrl: 'https://mmbiz.qpic.cn/mmemoticon/ajNVdqHZLLA16apETUPXh9Q5GLpSic7lGuiaic0jqMt4UY8P4KHSBpEWgM7uMlbxxnVR7596b3NPjUfwg7cFbfCtA/0',
+            success: function () {
+                console.log('分享成功');
+            },
+            cancel: function () {
+                console.log('分享失败');
+            }
+        };
+        wx.onMenuShareAppMessage(option);
+        console.log("share-friend1")
+    });
     function pushshare(index) {
         var option = {
             title: 'WeUI, 为微信 Web 服务量身设计',
