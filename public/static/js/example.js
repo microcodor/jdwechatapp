@@ -3,27 +3,7 @@
  * Modified by bear on 2016/9/7.
  */
 $(function () {
-    $('#share-friend').on('click', function () {
-        var val=$(this).attr("goods-id");
-        var name = $(this).attr("sku-name");
-        var option = {
-            //imgUrl: '', // 分享图标
-            //type: '', // 分享类型,music、video或link，不填默认为link
-            //dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-            title: name,
-            desc: name,
-            link: "http://wx.microcodor.com/index/index/detail?id="+val,
-            imgUrl: 'https://mmbiz.qpic.cn/mmemoticon/ajNVdqHZLLA16apETUPXh9Q5GLpSic7lGuiaic0jqMt4UY8P4KHSBpEWgM7uMlbxxnVR7596b3NPjUfwg7cFbfCtA/0',
-            success: function () {
-                console.log('分享成功');
-            },
-            cancel: function () {
-                console.log('分享失败');
-            }
-        };
-        wx.onMenuShareAppMessage(option);
-        console.log("share-friend1")
-    });
+
     var pageManager = {
         $container: $('#container'),
         _pageStack: [],
@@ -254,23 +234,19 @@ $(function () {
                 ]
             });
             wx.ready(function () {
-                /*
-                 wx.invoke('setNavigationBarColor', {
-                 color: '#F8F8F8'
-                 });
-                 */
-                wx.invoke('setBounceBackground', {
-                    'backgroundColor': '#F8F8F8',
-                    'footerBounceColor' : '#F8F8F8'
-                });
-                wx.onMenuShareTimeline(option);
-                wx.onMenuShareQQ(option);
-                wx.onMenuShareAppMessage({
-                    title: 'WeUI',
-                    desc: '为微信 Web 服务量身设计',
-                    link: location.href,
-                    imgUrl: 'https://mmbiz.qpic.cn/mmemoticon/ajNVdqHZLLA16apETUPXh9Q5GLpSic7lGuiaic0jqMt4UY8P4KHSBpEWgM7uMlbxxnVR7596b3NPjUfwg7cFbfCtA/0'
-                });
+                if (url.indexOf('detail')>=0) {
+                    var title = $('.jd-title').text();
+                    var id = $('#push-goods').attr('goods-id');
+                    var imgUrl = $('.goods-img').src;
+                    console.log('title:'+title);
+                    console.log('id:'+id);
+                    console.log('imgUrl:'+imgUrl);
+                    pushshare(id, title, imgUrl);
+                }
+                
+            });
+            wx.error(function () {
+                console.log('config error');
             });
         });
     }
@@ -320,19 +296,24 @@ $(function () {
     }
     init();
 
-    function pushshare(index) {
-        var option = {
-            title: 'WeUI, 为微信 Web 服务量身设计',
-            desc: 'WeUI, 为微信 Web 服务量身设计',
-            link: "https://weui.io",
-            imgUrl: 'https://mmbiz.qpic.cn/mmemoticon/ajNVdqHZLLA16apETUPXh9Q5GLpSic7lGuiaic0jqMt4UY8P4KHSBpEWgM7uMlbxxnVR7596b3NPjUfwg7cFbfCtA/0',
-            success: function () {
-                console.log('分享成功');
-            },
-            cancel: function () {
-                console.log('分享失败');
-            }
-        };
-        wx.onMenuShareTimeline(option);
+    function pushshare(id,title,imgUrl) {
+            var option = {
+                imgUrl: imgUrl, // 分享图标
+                //type: '', // 分享类型,music、video或link，不填默认为link
+                //dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                title: title,
+                desc: title,
+                link: "http://wx.microcodor.com/index/index/detail?id="+id,
+                imgUrl: 'https://mmbiz.qpic.cn/mmemoticon/ajNVdqHZLLA16apETUPXh9Q5GLpSic7lGuiaic0jqMt4UY8P4KHSBpEWgM7uMlbxxnVR7596b3NPjUfwg7cFbfCtA/0',
+                success: function () {
+                    console.log('分享成功');
+                },
+                cancel: function () {
+                    console.log('分享失败');
+                }
+            };
+            wx.onMenuShareAppMessage(option);
+            wx.onMenuShareTimeline(option);
+            console.log("share-friend1")
     }
 });
