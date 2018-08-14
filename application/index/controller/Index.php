@@ -69,7 +69,6 @@ class Index extends Controller
         return json(array('result'=>false));
     }
 
-
     public function nav(){
         return view('main');
     }

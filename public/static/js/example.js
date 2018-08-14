@@ -312,7 +312,3 @@ $(function () {
         wx.onMenuShareTimeline(option);
     }
 });
-function pushsku(id) {
-    alert(id);
-    
-}

@@ -57,7 +57,7 @@ class WechatUtil{
     public function get_access_token() {
         //$path = WEIXIN_ROBOT_PLUGIN_DIR."/access_token.json";
         $json = Cache::get('access_data');
-        echo "缓存access_token的数据:".$json;
+        //echo "缓存access_token的数据:".$json;
 
         // 检查文件并查看token是否过期
         //if(file_exists($path)) {
