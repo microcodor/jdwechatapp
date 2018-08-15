@@ -5,7 +5,7 @@
  * Date: 2018/8/15
  * Time: 上午11:54
  */
-namespace app\jdunion\utils;
+namespace app\unionjd\utils;
 
 define('APP_KEY','39ADDBACC0D5E0CFD90892D8D45FE3C4');
 define('APP_SECRET','d751c9481d524133a07167632b6624e4');
