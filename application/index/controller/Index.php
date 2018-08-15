@@ -3,13 +3,16 @@ namespace app\index\controller;
 
 use app\index\model\Goods;
 use app\index\model\User;
+use app\jdunion\utils\JingDongUtil;
 use app\wechat\utils\SimpleHtmlDom;
 use app\wechat\utils\WechatUtil;
+use think\Cache;
 use think\Controller;
 use think\db;
 use app\wechat\utils\Util;
 use think\Exception;
 use think\Log;
+use think\Session;
 
 
 class Index extends Controller
@@ -35,6 +38,14 @@ class Index extends Controller
         exit();
 
     }
+    public function getToken(){
+        $jingdongutil = new JingDongUtil();
+        if (!isset($_GET['code'])){
+            $jumpurl = $jingdongutil->oauth2_authorize();
+            header('Location:'.$jumpurl);
+            exit();
+        }
+    }
     /**
      * 详情页
      */
@@ -56,7 +67,7 @@ class Index extends Controller
     public function push(){
         $id = $_GET['id'];
         //echo "id:".$id;
-        $openId = session('openId');
+        $openId = Session::get('openId');
         Log::write("openId:".$openId,'notice');
         $wechatUtil = new WechatUtil();
         if ($openId){
@@ -70,7 +81,20 @@ class Index extends Controller
     }
 
     public function nav(){
+
         return view('main');
+    }
+    public function testcache(){
+        $str = Session::get('abdcddd');
+
+        if (!$str){
+            Session::set('abdcddd','111111111111111');
+        }else{
+            echo 'print:'.$str;
+        }
+        Session::clear();
+        echo '22';
+
     }
     public function redir(){
         header("Location:http://baidu.com");

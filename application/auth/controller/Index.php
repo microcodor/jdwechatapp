@@ -10,6 +10,7 @@ use app\index\model\User;
 use app\wechat\utils\WechatUtil;
 use think\Controller;
 use think\Exception;
+use think\Session;
 
 /**
 * 原生测试页
@@ -89,13 +90,13 @@ class Index extends Controller
                 //先判断用户数据是不是已经存储了，如果存储了获取用户在数据库中的唯一标识
                 //$user_id = $model->where(['openid'=>$array['openid']])->getField('user_id');
                 if($user){
-                    session('openId',$user['openId']);
+                    Session::set('openId',$user['openId']);
                 }else{
                     throw  new Exception("null");
                     $model = new User($array);
                     $model ->save();
                     //将用户在数据库中的唯一表示保存在session中
-                    session('openId',$model['openId']);
+                    Session::set('openId',$model['openId']);
                 }
                 //跳转网页
                 header('Location:'.$path);
