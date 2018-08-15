@@ -41,8 +41,11 @@ class Index extends Controller
             if ($oauth2_info){
                 Log::write('oauth2_access_token:'.$oauth2_info->access_token,'log');
                 Cache::set('oauth2_access_token',$oauth2_info);
-                //var_dump($oauth2_info);
+                return json_encode($oauth2_info);
+            }else{
+                return 'oauth2_info is null';
             }
         }
+        return false;
     }
 }
