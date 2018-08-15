@@ -9,7 +9,7 @@ namespace app\unionjd\utils;
 
 define('APP_KEY','39ADDBACC0D5E0CFD90892D8D45FE3C4');
 define('APP_SECRET','d751c9481d524133a07167632b6624e4');
-define('REDIRECT_URI', 'http://wx.microcodor.com/jdunion/oauth2');
+define('REDIRECT_URI', 'http://wx.microcodor.com/unionjd/index/oauth2');
 class JingDongUtil{
 
     //生成auth的url
