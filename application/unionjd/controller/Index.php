@@ -39,7 +39,7 @@ class Index extends Controller
         }else{
             $oauth2_info = $jingdongutil->oauth2_access_token($_GET['code']);
             if ($oauth2_info){
-                Log::write('oauth2_access_token:'.$oauth2_info->access_token,'log');
+                Log::write('oauth2_access_token:'.$oauth2_info['access_token'],'log');
                 Cache::set('oauth2_access_token',$oauth2_info);
                 return json_encode($oauth2_info);
             }else{
