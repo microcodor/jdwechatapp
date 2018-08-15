@@ -20,8 +20,7 @@ class JingDongUtil{
     }
 
     public function  oauth2_access_token($code, $state='oauth2_authorize'){
-        $url = 'https://oauth.jd.com/oauth/token?grant_type=authorization_code&client_id='.APP_KEY.'&
-                redirect_uri='.REDIRECT_URI.'&code='.$code.'&state='.$state.'&client_secret='.APP_SECRET;
+        $url = 'https://oauth.jd.com/oauth/token?grant_type=authorization_code&client_id='.APP_KEY.'&redirect_uri='.REDIRECT_URI.'&code='.$code.'&state='.$state.'&client_secret='.APP_SECRET;
         $res = $this->http_get_result($url);
 
         return $res;
