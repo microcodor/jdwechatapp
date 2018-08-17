@@ -353,22 +353,21 @@
                   index = 2;
               }
               //http://localhost/jdwechatapp/public/unionjd/index/couponGoods
+              //http://wx.microcodor.com/unionjd/index/couponGoods
               $.getJSON('http://wx.microcodor.com/unionjd/index/couponGoods', {'from':curPage*pageSize, 'pageSize': pageSize}, function(data) {
                   console.log('tabIndex:'+index+',sortIndex:'+sortIndex+',curPage:'+curPage+',pageSize:'+ pageSize);
                   if (curTabIndex!==tabIndex) {
                       getdata(tabIndex,sortIndex,0,size);
                       return;
                   }
-                  console.log(data);
-                  console.log("code:"+data.code);
-                  if (data===null||data.code!==1) {
+                  console.log(data.length);
+                  if (data===null) {
                       console.log("no data");
                       return;
                   }
 
-                  console.log("length:"+data.data.length);
-                  for (var i = 0; i < data.data.length; i++) {
-                      var obj = data.data[i];
+                  for (var i = 0; i < data.length; i++) {
+                      var obj = data[i];
 
                       var html = '<div class="weui-cell" id="'+obj.skuId+'">\n' +
                           '                      <div class="weui-cell__hd"><img src="'+obj.imgUrl+'" alt="" style="width:100px;margin-right:5px;display:block"></div>\n' +
