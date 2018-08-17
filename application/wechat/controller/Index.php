@@ -174,22 +174,23 @@ class Index extends Controller {
     }
     public function createMenu(){
         // api模块 - 包含各种系统主动发起的功能
-        $api = new Api(
-            array(
-                'appId' => config('appID'),
-                'appSecret'	=> config('appSecret'),
-                'get_access_token' => function(){
-                    // 用户需要自己实现access_token的返回
-                    $wechatUtil = new WechatUtil();
-                    $access_token = $wechatUtil->get_access_token();
-                    return $access_token;
-                },
-                'save_access_token' => function($token) {
-                    // 用户需要自己实现access_token的保存
-                    Cache::set("access_data",$token,7000);
-                }
-            )
-        );
+//        $api = new Api(
+//            array(
+//                'appId' => config('appID'),
+//                'appSecret'	=> config('appSecret'),
+//                'get_access_token' => function(){
+//                    // 用户需要自己实现access_token的返回
+//                    $wechatUtil = new WechatUtil();
+//                    $access_token = $wechatUtil->get_access_token();
+//                    return $access_token;
+//                },
+//                'save_access_token' => function($token) {
+//                    // 用户需要自己实现access_token的保存
+//                    Cache::set("access_data",$token,7000);
+//                }
+//            )
+//        );
+        $wechatUtil = new WechatUtil();
         $menu_json = '{
 	    "button":[
 	    {
@@ -218,7 +219,17 @@ class Index extends Controller {
 				]
 	    }]
   	}';
-        $api->create_menu($menu_json);
+        $wechatUtil->api->create_menu($menu_json);
+    }
+
+    public function getMenu(){
+        $wechatUtil = new WechatUtil();
+        list($err, $menu) = $wechatUtil->api->get_menu();
+        //var_dump($menu);
+        if ($menu!==null){
+            return $menu;
+        }
+        return json($err);
     }
 
     /**
