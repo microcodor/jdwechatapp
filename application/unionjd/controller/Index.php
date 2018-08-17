@@ -38,7 +38,7 @@ class Index extends Controller
         }
         $jingdongutil = new JingDongBeeApi();
         $res = $jingdongutil->get_coupon_goods($from, $pageSize);
-        return json_decode($res);
+        return json($res);
     }
     //商品信息
     public function getGoodsInfo(){
