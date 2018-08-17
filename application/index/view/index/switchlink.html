@@ -84,17 +84,8 @@
 <script type="text/javascript">
     var clipboard = new ClipboardJS('#btn-copy', {
         text: function() {
-            return '内购9.9抢购稻香村老月饼礼盒了！\n' +
-                '        低过秒杀价！负利冲量！\n' +
-                '        尝鲜价！手慢无货!\n' +
-                '\n' +
-                '        【京仓包邮】稻香村月饼礼盒 老月饼400g 8枚月饼3种口味。秒杀价：￥19.9，秒杀截止：17号18:00。\n' +
-                '        ————————\n' +
-                '        京东价：¥39.9\n' +
-                '        内购价：¥9.9（券后）\n' +
-                '        领券+下单：https://union-click.jd.com/jdc?d=i6hl5M\n' +
-                '        ————————\n' +
-                '        京东拼购•【我要开团】或【我要参团】均可下单';
+            var val = $('#short-info').html();
+            return val;
         }
     });
 
