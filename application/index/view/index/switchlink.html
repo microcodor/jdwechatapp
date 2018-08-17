@@ -100,7 +100,7 @@
 
         function switchUrl(shortInfo){
             $.ajax({
-                url: 'http://wx.microcodor.com/index/index/switchUrl',
+                url: 'http://localhost/jdwechatapp/public/index/index/switchUrl',
                 data:{'shortUrl': shortInfo},
                 type:'GET',
                 dataType:'text',
@@ -108,9 +108,10 @@
                     console.log('data:' + data)
                     showToast();
                     if (data) {
-                        var reg=/\n/g;
-                        var str=data.replace(reg,'<br/>');
-
+                        // var reg = new RegExp("\n","g");
+                        // var str=data.replace(reg,'<br/>');
+                        var str = data.replace(/\\n/g, "<br/>");
+                        console.log('str:' + str)
                         $('#short-info').html(str);
                         $('#btn-copy').show();
                     }
