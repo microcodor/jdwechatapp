@@ -108,7 +108,10 @@
                     console.log('data:' + data)
                     showToast();
                     if (data) {
-                        $('#short-info').html(data);
+                        var reg=/\n/g;
+                        var str=data.replace(reg,'<br/>');
+
+                        $('#short-info').html(str);
                         $('#btn-copy').show();
                     }
                 },
