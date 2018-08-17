@@ -146,6 +146,7 @@ class WechatUtil{
      */
     public function web_auth($auth_type,$callback_url,$main_url){
         $path = $this->api->get_authorize_url($auth_type, $callback_url,$main_url);
+        //echo $path;
         header('Location:'.$path);
     }
 
