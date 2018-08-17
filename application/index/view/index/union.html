@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>联盟信息</title>
+    <link rel="stylesheet" href="__STATIC__/css/weui.css"/>
+    <script type="text/javascript" src="__STATIC__/js/iscroll-probe.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/demoUtils.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/zepto.min.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <![endif]-->
+    <style type="text/css">
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        html {
+            -ms-touch-action: none;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+            border: 0;
+        }
+
+        body {
+            display: block;
+            font-size: 12px;
+            font-family: ubuntu, helvetica, arial;
+            overflow: hidden; /* this is important to prevent the whole page to bounce */
+        }
+    </style>
+</head>
+<body ontouchstart>
+    <div class="page">
+        <div class="weui-cells__title">联盟ID</div>
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请输入京东联盟ID"/>
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell weui-cell_switch">
+                <div class="weui-cell__bd">是否开启短链</div>
+                <div class="weui-cell__ft">
+                    <input class="weui-switch" id="id-smallLink" type="checkbox"/>
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell weui-cell_switch">
+                <div class="weui-cell__bd">图片二维码</div>
+                <div class="weui-cell__ft">
+                    <input class="weui-switch" id="id-show-qrcode" type="checkbox"/>
+                </div>
+            </div>
+        </div>
+        <div class="weui-btn-area">
+            <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">确定</a>
+        </div>
+    </div>
+
+
+
+<!--BEGIN toast-->
+<div id="toast" style="display: none;">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+        <p class="weui-toast__content">已完成</p>
+    </div>
+</div>
+<!--end toast-->
+<!-- loading toast -->
+<div id="loadingToast" style="display:none;">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-loading weui-icon_toast"></i>
+        <p class="weui-toast__content">数据推送中</p>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        getdata();
+        function getdata(){
+            //test data
+            $.getJSON('http://wx.microcodor.com/index/index/userconfig', function(data) {
+                console.log('data smallLink:'+data.smallLink);
+                console.log('data showQrcode:'+data.showQrcode);
+                if (data){
+                    if (data.unionId!==null) {
+                        $('.weui-input').val(data.unionId+'');
+                    }
+                    console.log('data:'+(data.smallLink===0));
+                    if (data.smallLink===0) {
+                        $('#id-smallLink').removeAttr('checked');
+                    }else {
+                        $('#id-smallLink').attr('checked','true');
+                    }
+                    if (data.showQrcode===0) {
+                        $('#id-show-qrcode').removeAttr('checked');
+                    }else {
+                        $('#id-show-qrcode').attr('checked','true');
+                    }
+                }
+
+            });
+        }
+        function setdata(unionId, isChecked){
+            console.log("setdata:"+(isChecked===true?1:0));
+            //test data
+            $.ajax({
+                url: 'http://wx.microcodor.com/index/index/userconfig',
+                data:{'unionId': unionId,'smallLink':isChecked===true?1:0,'showQrcode':isChecked===true?1:0},
+                type:'POST',
+                success: function(data) {
+                    console.log('data smallLink:' + (data.smallLink==0))
+                    console.log('data showQrcode:' + (data.showQrcode==0))
+                    showToast();
+                    if (data) {
+                        if (data.unionId !== null) {
+                            $('.weui-input').val(data.unionId + '');
+                        }
+                        if (data.smallLink===0) {
+                            $('#id-smallLink').removeAttr('checked');
+                        }else {
+                            $('#id-smallLink').attr('checked','true');
+                        }
+                        if (data.showQrcode===0) {
+                            $('#id-show-qrcode').removeAttr('checked');
+                        }else {
+                            $('#id-show-qrcode').attr('checked','true');
+                        }
+                    }
+                },
+                error:function (result) {
+                    console.log('error result:' + result)
+                }
+
+            });
+        }
+        $('#showTooltips').on('click', function(event){
+            var unionId=$('.weui-input').val();
+
+            var isChecked = $(".weui-switch").prop("checked") == true;
+            console.log("click isChecked:"+isChecked);
+            setdata(unionId,isChecked);
+        })
+        var $loadingToast = $('#loadingToast');
+        var $toast = $('#toast');
+        function showLoading(){
+            if ($loadingToast.css('display') != 'none') return;
+
+            $loadingToast.fadeIn(100);
+        }
+        function hideLoading(){
+            setTimeout(function () {
+                $loadingToast.fadeOut(100);
+            }, 500);
+        }
+        function showToast(){
+            if ($toast.css('display') != 'none') return;
+
+            $toast.fadeIn(100);
+            setTimeout(function () {
+                $toast.fadeOut(100);
+            }, 2000);
+        }
+
+
+        $('.weui-cells').on('touchend', '.weui-cell .weui-btn_push', function(e){
+            var val=$(this).attr("id");
+            console.log("button click:"+val);
+            showLoading();
+            $.ajax({
+                type: "GET",
+                url: "http://wx.microcodor.com/index/index/push",
+                data: {id:val},
+                dataType: "json",
+                success: function(data){
+                    console.log(data);
+                    hideLoading();
+                    if (data.result){
+                        showToast();
+                    }
+                },
+                error: function () {
+                    hideLoading();
+
+                }
+            });
+
+            e.preventDefault();
+        })
+    });
+</script>
+
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+<script src="__STATIC__/js/example.js"></script>
+</body>
+</html>

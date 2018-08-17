@@ -200,25 +200,22 @@ class Index extends Controller {
 	    {
 	      "type":"view",
 	      "name":"爆品高佣",
-	      "url":"http://microcodor.com"
+	      "url":"http://wx.microcodor.com/index/index/main"
 	    },
 	    {
 	      "name":"服务中心",
 	      "sub_button":[
 					{
 						"type":"click",
-						"name":"今日必推",
-						"key":"MENU_RECENT_POSTS"
-					},
-					{
-						"type":"click",
-						"name":"推广榜单",
-						"key":"MENU_RANDOM_POSTS"
+						"name":"修改联盟ID",
+						"key":"MENU_RECENT_POSTS",
+						"url":"http://wx.microcodor.com/index/index/union"
 					},
 					{
 						"type":"click",
 						"name":"万能转链",
-						"key":"MENU_HOTEST_POSTS"
+						"key":"MENU_HOTEST_POSTS",
+						"url":"http://wx.microcodor.com/index/index/switchlink"
 					}
 				]
 	    }]

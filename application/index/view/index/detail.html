@@ -57,20 +57,20 @@
 <div class="container" id="container">
     <div class="content">
         <div class="view-img">
-            <img src="{$goods->image}" class="goods-img">
+            <img src="{$goods->imgUrl}" class="goods-img">
         </div>
 
         <div class="jd-info">
-            <div class="jd-title">{$goods->sku_name}</div>
+            <div class="jd-title">{$goods->goodsName}</div>
             <div class="jd-bottom">
-                <div class="jd-price">京东价：¥198</div>
-                <div class="jd-sell-price">内购价：¥89（券后）</div>
+                <div class="jd-price">京东价：¥{$goods->unitPrice}</div>
+                <div class="jd-sell-price">内购价：¥{$goods->wlUnitPrice}</div>
                 <div class="jd-commission">佣金：20%</div>
 
             </div>
         </div>
         <div class="page__bd page__bd_spacing">
-        <a href="javascript:void(0);" id="push-goods" goods-id="{$goods->id}" class="weui-btn weui-btn_primary">一键推广</a>
+        <a href="javascript:void(0);" id="push-goods" goods-id="{$goods->skuId}" class="weui-btn weui-btn_primary">一键推广</a>
         </div>
     </div>
 </div>

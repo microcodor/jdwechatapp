@@ -7,6 +7,7 @@
  */
 namespace app\unionjd\controller;
 
+use app\unionjd\utils\JingDongBeeApi;
 use app\unionjd\utils\JingDongUtil;
 use think\Cache;
 use think\Controller;
@@ -25,11 +26,34 @@ class Index extends Controller
     {
         echo 'aaaaa';
     }
+    //优惠商品
+    public function couponGoods(){
+        $from = 0;
+        $pageSize = 10;
+        if (isset($_GET['from'])){
+            $from = $_GET['from'];
+        }
+        if (isset($_GET['pageSize'])){
+            $pageSize = $_GET['pageSize'];
+        }
+        $jingdongutil = new JingDongBeeApi();
+        $res = $jingdongutil->get_coupon_goods($from, $pageSize);
+        return json_decode($res);
+    }
+    //商品信息
+    public function getGoodsInfo(){
+        $jingdongutil = new JingDongBeeApi();
+        $res = $jingdongutil->get_goods_info($_GET['skuIds']);
+        return $res;
+    }
+
     public function getToken(){
         $oauth2_info =  Cache::get('oauth2_access_token');
         var_dump($oauth2_info);
     }
-
+    /**
+     *   京东联盟access_token,定期获取
+     */
     public function oauth2(){
         $jingdongutil = new JingDongUtil();
         if (!isset($_GET['code'])){

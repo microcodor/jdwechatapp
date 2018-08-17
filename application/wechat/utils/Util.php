@@ -112,4 +112,60 @@ class Util {
 
     }
 
+    public static function downloadImage($url, $path = 'images/'){
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+        $file = curl_exec($ch);
+        curl_close($ch);
+        $filename = pathinfo($url, PATHINFO_BASENAME);
+        $resource = fopen($path . $filename, 'a');
+        fwrite($resource, $file);
+        fclose($resource);
+     }
+
+    /**
+     * Convert a string to an array
+     * @param string $str
+     * @param number $split_length
+     * @return multitype:string
+     */
+    public static function mb_str_split($str,$split_length=1,$charset="UTF-8"){
+        if(func_num_args()==1){
+            return preg_split('/(?<!^)(?!$)/u', $str);
+        }
+        if($split_length<1)return false;
+        $len = mb_strlen($str, $charset);
+        $arr = array();
+        for($i=0;$i<$len;$i+=$split_length){
+            $s = mb_substr($str, $i, $split_length, $charset);
+            $arr[] = $s;
+        }
+        return $arr;
+    }
+    public static function curl_get_302($url) {
+        $ch = curl_init();
+        curl_setopt($ch,  CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_URL,  $url);
+        curl_setopt($ch,  CURLOPT_FOLLOWLOCATION, 1); // 302 redirect
+        $data = curl_exec($ch);
+        $Headers =  curl_getinfo($ch);
+        curl_close($ch);
+        if ($data != $Headers)
+            return  $Headers["url"];
+        else
+            return false;
+    }
+    public static function convertUrlQuery($query){
+        $query = str_replace("?", "&", $query);
+        $queryParts = explode('&', $query);
+        $params = array();
+        foreach ($queryParts as $param) {
+            $item = explode('=', $param);
+            $params[@$item[0]] = @$item[1];
+        }
+        return $params;
+    }
+
 }

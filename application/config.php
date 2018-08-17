@@ -236,6 +236,7 @@ return [
         'var_page'  => 'page',
         'list_rows' => 15,
     ],
+    'html_cache_on' => false,
     //'配置项'=>'配置值'
     'appID'=>'wxd92439ed67f18c2a',
     'appSecret'=>'711da457037ce5073af0689dd3ba8dbd',

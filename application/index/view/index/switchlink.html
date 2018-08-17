@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>联盟信息</title>
+    <link rel="stylesheet" href="__STATIC__/css/weui.css"/>
+    <script type="text/javascript" src="__STATIC__/js/iscroll-probe.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/demoUtils.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/zepto.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/clipboard.min.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <![endif]-->
+    <style type="text/css">
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        html {
+            -ms-touch-action: none;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+            border: 0;
+        }
+
+        body {
+            display: block;
+            font-size: 12px;
+            font-family: ubuntu, helvetica, arial;
+            overflow: hidden; /* this is important to prevent the whole page to bounce */
+        }
+    </style>
+</head>
+<body ontouchstart>
+    <div class="page">
+        <div class="weui-cells__title">万能转链</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea class="weui-textarea" placeholder="请输入文本" rows="3"></textarea>
+                    <div class="weui-textarea-counter"><span>0</span>/200</div>
+                </div>
+            </div>
+        </div>
+        <div class="weui-btn-area">
+            <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">一键转链</a>
+        </div>
+    </div>
+    <div class="weui-cells__title">转链结果</div>
+    <div id="short-info"></div>
+    <a href="javascript:;" id="btn-copy" class="weui-btn weui-btn_warn" style="display: none;">一键复制</a>
+
+<!--BEGIN toast-->
+<div id="toast" style="display: none;">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+        <p class="weui-toast__content">已完成</p>
+    </div>
+</div>
+<!--end toast-->
+<!-- loading toast -->
+<div id="loadingToast" style="display:none;">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-loading weui-icon_toast"></i>
+        <p class="weui-toast__content">数据推送中</p>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var clipboard = new ClipboardJS('#btn-copy', {
+        text: function() {
+            return '内购9.9抢购稻香村老月饼礼盒了！\n' +
+                '        低过秒杀价！负利冲量！\n' +
+                '        尝鲜价！手慢无货!\n' +
+                '\n' +
+                '        【京仓包邮】稻香村月饼礼盒 老月饼400g 8枚月饼3种口味。秒杀价：￥19.9，秒杀截止：17号18:00。\n' +
+                '        ————————\n' +
+                '        京东价：¥39.9\n' +
+                '        内购价：¥9.9（券后）\n' +
+                '        领券+下单：https://union-click.jd.com/jdc?d=i6hl5M\n' +
+                '        ————————\n' +
+                '        京东拼购•【我要开团】或【我要参团】均可下单';
+        }
+    });
+
+    clipboard.on('success', function(e) {
+        console.log(e);
+    });
+
+    clipboard.on('error', function(e) {
+        console.log(e);
+    });
+    $(function(){
+
+        function switchUrl(shortInfo){
+            $.ajax({
+                url: 'http://wx.microcodor.com/index/index/switchUrl',
+                data:{'shortUrl': shortInfo},
+                type:'GET',
+                dataType:'text',
+                success: function(data) {
+                    console.log('data:' + data)
+                    showToast();
+                    if (data) {
+                        $('#short-info').html(data);
+                        $('#btn-copy').show();
+                    }
+                },
+                error:function (result) {
+                    console.log('error result:' + result)
+                }
+
+            });
+        }
+        $('#showTooltips').on('click', function(){
+            var val=$('.weui-textarea').val();
+            console.log("click:"+val);
+            switchUrl(val);
+        })
+        var $loadingToast = $('#loadingToast');
+        var $toast = $('#toast');
+        function showLoading(){
+            if ($loadingToast.css('display') != 'none') return;
+
+            $loadingToast.fadeIn(100);
+        }
+        function hideLoading(){
+            setTimeout(function () {
+                $loadingToast.fadeOut(100);
+            }, 500);
+        }
+        function showToast(){
+            if ($toast.css('display') != 'none') return;
+
+            $toast.fadeIn(100);
+            setTimeout(function () {
+                $toast.fadeOut(100);
+            }, 2000);
+        }
+    });
+</script>
+
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+<script src="__STATIC__/js/example.js"></script>
+</body>
+</html>

@@ -352,52 +352,76 @@
               }else {
                   index = 2;
               }
-              //http://wx.microcodor.com/index/index/getTabData
-              $.getJSON('http://wx.microcodor.com/index/index/getTabData', {'tabIndex': index, 'sortIndex':sortIndex, 'curPage':curPage, 'pageSize': pageSize}, function(data) {
+              //http://localhost/jdwechatapp/public/unionjd/index/couponGoods
+              $.getJSON('http://wx.microcodor.com/unionjd/index/couponGoods', {'from':curPage*pageSize, 'pageSize': pageSize}, function(data) {
                   console.log('tabIndex:'+index+',sortIndex:'+sortIndex+',curPage:'+curPage+',pageSize:'+ pageSize);
                   if (curTabIndex!==tabIndex) {
                       getdata(tabIndex,sortIndex,0,size);
                       return;
                   }
-                  if (data===null||data.length===0) {
+                  console.log(data);
+                  console.log("code:"+data.code);
+                  if (data===null||data.code!==1) {
                       console.log("no data");
                       return;
                   }
-                  console.log(data);
-                  console.log(data.length);
-                  for (var i = 0; i < data.length; i++) {
-                      var obj = data[i];
 
-                      var html = '<div class="weui-cell" id="'+obj.id+'">\n' +
-                          '                      <div class="weui-cell__hd"><img src="'+obj.image+'" alt="" style="width:100px;margin-right:5px;display:block"></div>\n' +
+                  console.log("length:"+data.data.length);
+                  for (var i = 0; i < data.data.length; i++) {
+                      var obj = data.data[i];
+
+                      var html = '<div class="weui-cell" id="'+obj.skuId+'">\n' +
+                          '                      <div class="weui-cell__hd"><img src="'+obj.imgUrl+'" alt="" style="width:100px;margin-right:5px;display:block"></div>\n' +
                           '                      <div class="weui-cell__bd">\n' +
-                          '                          <div class="jd-title">'+obj.sku_name+'</div>\n' +
-                          '                          <div class="jd-price">京东价：¥'+obj.price+'</div>\n' +
+                          '                          <div class="jd-title">'+obj.skuName+'</div>\n' +
+                          '                          <div class="jd-price">京东价：¥'+obj.pcPrice+'</div>\n' +
                           '                          <div class="jd-bottom">\n' +
                           '                              <div class="jd-sell-price">\n' +
-                          '                                  <div>内购价：¥'+obj.sell_price+'</div>\n' +
-                          '                                  <div>佣金：'+obj.commission+'%</div>\n' +
+                          '                                  <div>内购价：¥'+obj.wlPrice+'</div>\n' +
+                          '                                  <div>佣金：'+obj.wlCommission+'</div>\n' +
                           '                              </div>\n' +
-                          '                              <div class="weui-cell__ft"><a href="javascript:void(0)" id="'+obj.id+'" class="weui-btn_push">一键推广</a></div>\n' +
+                          '                              <div class="weui-cell__ft"><a href="javascript:void(0)" id="'+obj.skuId+'" class="weui-btn_push">一键推广</a></div>\n' +
                           '\n' +
                           '                          </div>\n' +
                           '\n' +
                           '                      </div>\n' +
                           '                  </div>';
-                      // var html = '<div class="weui-cell">\n' +
-                      //     '                      <div class="weui-cell__hd"><img src="'+obj.image+'" alt="" style="width:80px;margin-right:5px;display:block"></div>\n' +
-                      //     '                      <div class="weui-cell__bd">\n' +
-                      //     '                          <div class="jd-title">'+obj.sku_name+'</div>\n' +
-                      //     '                          <div class="jd-price">京东价：¥'+obj.price+'</div>\n' +
-                      //     '                          <div class="jd-sell-price">\n' +
-                      //     '                              <div>内购价：¥'+obj.sell_price+'（券后）</div>\n' +
-                      //     '                              <div>佣金：'+obj.commission+'%</div>\n' +
-                      //     '                          </div>\n' +
-                      //     '                      </div>\n' +
-                      //     '                      <div class="weui-cell__ft"><a href="javascript:pushsku('+obj.id+');" class="weui-btn weui-btn_mini weui-btn_primary">一键推广</a></div>\n' +
-                      //     '                  </div>';
                       $('.weui-cells').append(html);
                   }
+              //http://wx.microcodor.com/index/index/getTabData
+              // $.getJSON('http://wx.microcodor.com/index/index/getTabData', {'tabIndex': index, 'sortIndex':sortIndex, 'curPage':curPage, 'pageSize': pageSize}, function(data) {
+              //     console.log('tabIndex:'+index+',sortIndex:'+sortIndex+',curPage:'+curPage+',pageSize:'+ pageSize);
+              //     if (curTabIndex!==tabIndex) {
+              //         getdata(tabIndex,sortIndex,0,size);
+              //         return;
+              //     }
+              //     if (data===null||data.length===0) {
+              //         console.log("no data");
+              //         return;
+              //     }
+              //     console.log(data);
+              //     console.log(data.length);
+              //     for (var i = 0; i < data.length; i++) {
+              //         var obj = data[i];
+              //
+              //         var html = '<div class="weui-cell" id="'+obj.id+'">\n' +
+              //             '                      <div class="weui-cell__hd"><img src="'+obj.image+'" alt="" style="width:100px;margin-right:5px;display:block"></div>\n' +
+              //             '                      <div class="weui-cell__bd">\n' +
+              //             '                          <div class="jd-title">'+obj.sku_name+'</div>\n' +
+              //             '                          <div class="jd-price">京东价：¥'+obj.price+'</div>\n' +
+              //             '                          <div class="jd-bottom">\n' +
+              //             '                              <div class="jd-sell-price">\n' +
+              //             '                                  <div>内购价：¥'+obj.sell_price+'</div>\n' +
+              //             '                                  <div>佣金：'+obj.commission+'%</div>\n' +
+              //             '                              </div>\n' +
+              //             '                              <div class="weui-cell__ft"><a href="javascript:void(0)" id="'+obj.id+'" class="weui-btn_push">一键推广</a></div>\n' +
+              //             '\n' +
+              //             '                          </div>\n' +
+              //             '\n' +
+              //             '                      </div>\n' +
+              //             '                  </div>';
+              //         $('.weui-cells').append(html);
+              //     }
                   page = curPage;
                   myScroll.refresh();
               });
