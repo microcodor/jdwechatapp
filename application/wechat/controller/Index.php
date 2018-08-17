@@ -221,7 +221,7 @@ class Index extends Controller {
   	}';
         list($err, $res)  = $wechatUtil->api->create_menu($menu_json);
         if ($res!==null){
-            return $res;
+            return json($res);
         }
         return json($err);
     }
@@ -231,7 +231,7 @@ class Index extends Controller {
         list($err, $menu) = $wechatUtil->api->get_menu();
         //var_dump($menu);
         if ($menu!==null){
-            return $menu;
+            return json($menu);
         }
         return json($err);
     }
