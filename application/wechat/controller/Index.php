@@ -219,7 +219,11 @@ class Index extends Controller {
 				]
 	    }]
   	}';
-        $wechatUtil->api->create_menu($menu_json);
+        list($err, $res)  = $wechatUtil->api->create_menu($menu_json);
+        if ($res!==null){
+            return $res;
+        }
+        return json($err);
     }
 
     public function getMenu(){
