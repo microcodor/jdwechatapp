@@ -206,15 +206,13 @@ class Index extends Controller {
 	      "name":"服务中心",
 	      "sub_button":[
 					{
-						"type":"click",
+						"type":"view",
 						"name":"修改联盟ID",
-						"key":"MENU_RECENT_POSTS",
 						"url":"http://wx.microcodor.com/index/index/union"
 					},
 					{
-						"type":"click",
+						"type":"view",
 						"name":"万能转链",
-						"key":"MENU_HOTEST_POSTS",
 						"url":"http://wx.microcodor.com/index/index/switchlink"
 					}
 				]
