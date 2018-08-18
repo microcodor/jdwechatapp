@@ -61,7 +61,7 @@ class Index extends Controller {
         $msg = $wechatUtil->wechat->serve();
 
         // 默认消息
-        $default_msg = "/微笑  欢迎关注本测试号:\n 回复1: 回复文本消息\n 回复2: 回复图片消息\n 回复3: 回复语音消息\n 回复4: 回复视频消息\n 回复5: 回复音乐消息\n 回复6: 回复图文消息";
+        $default_msg = "/微笑  欢迎关注京乐推！";
         Log::write('MsgType:'.$msg->MsgType,'log');
         Log::write('Content:'.$msg->Content,'log');
         // 用户关注微信号后 - 回复用户普通文本消息

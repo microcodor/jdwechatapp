@@ -238,14 +238,21 @@ return [
     ],
     'html_cache_on' => false,
     //'配置项'=>'配置值'
+    //测试号
 //    'appID'=>'wxd92439ed67f18c2a',
 //    'appSecret'=>'711da457037ce5073af0689dd3ba8dbd',
 //    'token'=>'jdwechatapp',
 //    'encodingAESKey' => '072vHYArTp33eFwznlSvTRvuyOTe5YME1vxSoyZbzaV',
-    'appID'=>'wxf10464e69dfbd295',
-    'appSecret'=>'604f3f3c6cbcfdb4d916c3acb17b70ee',
+//jpy
+//    'appID'=>'wxf10464e69dfbd295',
+//    'appSecret'=>'604f3f3c6cbcfdb4d916c3acb17b70ee',
+//    'token'=>'jdwechatapp',
+//    'encodingAESKey' => 'l3BWgdh4lYmmNpUlj4cNo3mDDCpGp9DiTEkPPPAgrbY',
+//jlt
+    'appID'=>'wx8b5bc8f2d27e07cc',
+    'appSecret'=>'c6c18e4547635017096581e9ce6cee90',
     'token'=>'jdwechatapp',
-    'encodingAESKey' => 'l3BWgdh4lYmmNpUlj4cNo3mDDCpGp9DiTEkPPPAgrbY',
+    'encodingAESKey' => 'K0xxeGczdJgkfAoDFs0m46H5DO6aq7069zyLxVJcDJR',
 
     // 视图输出字符串内容替换
     'view_replace_str'       => [
