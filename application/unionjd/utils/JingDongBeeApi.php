@@ -307,10 +307,15 @@ class JingDongBeeApi{
         return false;
     }
     /**
-     *   优惠券商品查询(单个／集合)
+     *   优惠券商品查询(单个)
      */
-    public function getCouponSkuInfo($skuIdList, $pageIndex='', $pageSize='', $cid3='', $goodsKeyword='', $priceFrom='', $priceTo=''){
-        $res = $this->http_get_result('https://jd.open.beeapi.cn/union/queryCouponGoods?skuIdList='.$skuIdList);
+
+    public function getCouponSkuInfo($skuIdList='', $pageIndex='', $pageSize='', $cid3='', $goodsKeyword='', $priceFrom='', $priceTo=''){
+        $url = '';
+        if (isset($skuIdList)){
+            $url = 'https://jd.open.beeapi.cn/union/queryCouponGoods?skuIdList='.$skuIdList;
+        }
+        $res = $this->http_get_result($url);
         $res = json_decode($res);
         if ($res&&$res->code===1&&$res->data){
             //var_dump(sizeof($res->data));
@@ -319,7 +324,34 @@ class JingDongBeeApi{
         }
         return false;
     }
+    /**
+     *   优惠券商品list分页查询(集合)
+     */
+    public function getCouponSkuList($pageIndex='', $pageSize='', $cid3='', $goodsKeyword='', $priceFrom='', $priceTo=''){
+        $url = 'https://jd.open.beeapi.cn/union/queryCouponGoods?pageIndex='.$pageIndex.'&pageSize='.$pageSize;
 
+        $res = $this->http_get_result($url);
+        $res = json_decode($res);
+        if ($res&&$res->code===1&&$res->data){
+            return $res->data->goodsList;
+            //var_dump($goods->imgUrl);
+        }
+        return false;
+    }
+    /**
+     *   优惠券商品关键词搜索
+     */
+    public function searchCouponSkuList($pageIndex='', $pageSize='', $cid3='', $goodsKeyword='', $priceFrom='', $priceTo=''){
+        $url = 'https://jd.open.beeapi.cn/union/queryCouponGoods?pageIndex='.$pageIndex.'&pageSize='.$pageSize.'&goodsKeyword='.$goodsKeyword;
+
+        $res = $this->http_get_result($url);
+        $res = json_decode($res);
+        if ($res&&$res->code===1&&$res->data){
+            return $res->data->goodsList;
+            //var_dump($goods->imgUrl);
+        }
+        return false;
+    }
 
 
 

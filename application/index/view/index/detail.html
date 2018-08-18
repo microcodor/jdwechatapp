@@ -95,9 +95,9 @@
 <script src="__STATIC__/js/zepto.min.js"></script>
 <script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-<script src="__STATIC__/js/example.js"></script>
 <script type="text/javascript">
     $(function () {
+        setJSAPI();
         var $loadingToast = $('#loadingToast');
         var $toast = $('#toast');
         function showLoading(){
@@ -144,6 +144,63 @@
 
             //e.preventDefault();
         })
+
+        function setJSAPI(){
+            var url =location.href.split('#')[0];
+            console.log("url:"+url);
+            //$.getJSON('auth/index?&url=' + encodeURIComponent(location.href.split('#')[0]), function (res) {
+            //http://localhost/jdwechatapp/public/auth/index
+            $.getJSON('http://wx.microcodor.com/auth/index',{"url": url}, function (res) {
+                console.log(res);
+                wx.config({
+                    beta: true,
+                    debug: true,
+                    appId: res.appId,
+                    timestamp: res.timestamp,
+                    nonceStr: res.nonceStr,
+                    signature: res.signature,
+                    jsApiList: [
+                        'onMenuShareTimeline',
+                        'onMenuShareAppMessage'
+                    ]
+                });
+                wx.ready(function () {
+                    if (url.indexOf('detail')>=0) {
+                        var title = $('.jd-title').text();
+                        var id = $('#push-goods').attr('goods-id');
+                        var imgUrl = $('.goods-img')[0].src;
+                        console.log('title:'+title);
+                        console.log('id:'+id);
+                        console.log('imgUrl:'+imgUrl);
+                        pushshare(id, title, imgUrl);
+                    }
+
+                });
+                wx.error(function () {
+                    console.log('config error');
+                });
+            });
+        }
+
+        function pushshare(id,title,imgUrl) {
+            var option = {
+                imgUrl: imgUrl, // 分享图标
+                //type: '', // 分享类型,music、video或link，不填默认为link
+                //dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                title: title,
+                desc: title,
+                link: "http://wx.microcodor.com/index/index/authDetail?id="+id,
+                success: function () {
+                    console.log('分享成功');
+                },
+                cancel: function () {
+                    console.log('分享失败');
+                }
+            };
+            wx.onMenuShareAppMessage(option);
+            wx.onMenuShareTimeline(option);
+            console.log("share-friend1")
+        }
     })
 </script>
 </body>

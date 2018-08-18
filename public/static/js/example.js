@@ -204,12 +204,6 @@ $(function () {
         }
     }
     function setJSAPI(){
-        var option = {
-            title: 'WeUI, 为微信 Web 服务量身设计',
-            desc: 'WeUI, 为微信 Web 服务量身设计',
-            link: "https://weui.io",
-            imgUrl: 'https://mmbiz.qpic.cn/mmemoticon/ajNVdqHZLLA16apETUPXh9Q5GLpSic7lGuiaic0jqMt4UY8P4KHSBpEWgM7uMlbxxnVR7596b3NPjUfwg7cFbfCtA/0'
-        };
         var url =location.href.split('#')[0];
         console.log("url:"+url);
         //$.getJSON('auth/index?&url=' + encodeURIComponent(location.href.split('#')[0]), function (res) {
@@ -225,12 +219,7 @@ $(function () {
                 signature: res.signature,
                 jsApiList: [
                     'onMenuShareTimeline',
-                    'onMenuShareAppMessage',
-                    'onMenuShareQQ',
-                    'onMenuShareWeibo',
-                    'onMenuShareQZone',
-                    // 'setNavigationBarColor',
-                    'setBounceBackground'
+                    'onMenuShareAppMessage'
                 ]
             });
             wx.ready(function () {
