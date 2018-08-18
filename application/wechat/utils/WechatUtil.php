@@ -11,7 +11,7 @@ namespace app\wechat\utils;
 use Gaoming13\WechatPhpSdk\Api;
 use Gaoming13\WechatPhpSdk\Wechat;
 use think\Cache;
-
+use think\Log;
 
 
 class WechatUtil{
@@ -38,10 +38,12 @@ class WechatUtil{
                         // 用户需要自己实现access_token的返回
                         //$wechatUtil = new WechatUtil();
                         $access_token = $this->get_access_token();
+                        //echo 'get_access_token1:'.$access_token;
                         return $access_token;
                     },
                     'save_access_token' => function($token) {
                         // 用户需要自己实现access_token的保存
+                        //echo 'get_access_token2:'.$token;
                         Cache::set("access_data",$token,7000);
                     },
                     'get_jsapi_ticket' => function(){
@@ -67,37 +69,32 @@ class WechatUtil{
     public function get_access_token() {
         //$path = WEIXIN_ROBOT_PLUGIN_DIR."/access_token.json";
         $json = Cache::get('access_data');
-        //echo "缓存access_token的数据:".$json;
+        //echo "get_access_token3:".$json;
 
         // 检查文件并查看token是否过期
         //if(file_exists($path)) {
         if ($json){
             // $json = file_get_contents($path);
-            if(!isset($json['access_token']) || !isset($json['time']) || !isset($json['expires_in']))
-                return false;
             $array = json_decode($json, true);
-            $expires_time = intval($array["time"]) + intval($array["expires_in"]) - 100;
-            $now = time();
-            if($now < $expires_time)
-                return $json;
+            //echo "get_access_token4 :".$array['access_token'];
+            if(isset($array['access_token']) && isset($array['expires_in'])){
+                $expires_time = intval($array["expires_in"]) - 100;
+                $now = time();
+                //echo "get_access_token5 :".($now < $expires_time);
+                if($now < $expires_time)
+                    return $json;
+            }
         }
         // 如果文件不存在或者token已经过期则向服务器请求
         $result = $this->http_get_result("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".config("appID")."&secret=".config("appSecret"));
+        //echo "result:".$result;
         if($result) {
             $json = json_decode($result, true);
             //echo "expires_in上还是：".$json["expires_in"];
             if(!$json || isset($json['errcode']))
                 return false;
-            $json["time"] = time();
-            //$json = json_encode($json);
-            // 写入文件
-            //$file = fopen($path, "wb");
-            //Cache::set("access_data",json_encode($json),7000);
-            //            if($file!==false) {
-            //                fwrite($file, $json);
-            //                fclose($file);
-            //            }
             //echo "access_token的数据:".$json["access_token"];
+            Cache::set("access_data",json_encode($json),7000);
             return json_encode($json);
         }
         return false;
@@ -110,6 +107,7 @@ class WechatUtil{
     public function get_jsapi_ticket()
     {
         $ticket = Cache::get('jsapi_ticket');
+        Log::write('get_jsapi_ticket1:'.$ticket,'log');
         if ($ticket){
             // $json = file_get_contents($path);
             if(!isset($ticket['ticket']) || !isset($ticket['time']) || !isset($ticket['expires_in']))
@@ -121,6 +119,7 @@ class WechatUtil{
                 return $ticket;
         }
         $result = $this->http_get_result("https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" . $this->get_access_token() . "&type=jsapi");
+        Log::write('get_jsapi_ticket2:'.$ticket,'log');
         if($result) {
             $json = json_decode($result, true);
             //echo "expires_in上还是：".$json["expires_in"];

@@ -120,7 +120,7 @@ class Api
         if ($this->get_access_token_diy !== false) {
             // 调用用户自定义获取AccessToken方法
             $token = call_user_func($this->get_access_token_diy);
-
+            //echo 'get_access_token:'.$token;
             if ($token) {
                 $token = json_decode($token);
             }
