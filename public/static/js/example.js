@@ -304,7 +304,6 @@ $(function () {
                 title: title,
                 desc: title,
                 link: "http://wx.microcodor.com/index/index/detail?id="+id,
-                imgUrl: 'https://mmbiz.qpic.cn/mmemoticon/ajNVdqHZLLA16apETUPXh9Q5GLpSic7lGuiaic0jqMt4UY8P4KHSBpEWgM7uMlbxxnVR7596b3NPjUfwg7cFbfCtA/0',
                 success: function () {
                     console.log('分享成功');
                 },

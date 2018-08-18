@@ -298,6 +298,7 @@
           var page = 0;
           var size = 5;
           loaded();
+          setJSAPI();
           initData(getCurTabSort(tabIndex));
 
           console.log("初始化数据："+myScroll.y + '&' + myScroll.maxScrollY);
@@ -497,14 +498,67 @@
                   return preSort3;
               }
           }
+          function setJSAPI(){
+              var option = {
+                  title: 'WeUI, 为微信 Web 服务量身设计',
+                  desc: 'WeUI, 为微信 Web 服务量身设计',
+                  link: "https://weui.io",
+                  imgUrl: 'https://mmbiz.qpic.cn/mmemoticon/ajNVdqHZLLA16apETUPXh9Q5GLpSic7lGuiaic0jqMt4UY8P4KHSBpEWgM7uMlbxxnVR7596b3NPjUfwg7cFbfCtA/0'
+              };
+              var url =location.href.split('#')[0];
+              console.log("url:"+url);
+              //$.getJSON('auth/index?&url=' + encodeURIComponent(location.href.split('#')[0]), function (res) {
+              //http://localhost/jdwechatapp/public/auth/index
+              $.getJSON('http://wx.microcodor.com/auth/index',{"url": url}, function (res) {
+                  console.log(res);
+                  wx.config({
+                      beta: true,
+                      debug: true,
+                      appId: res.appId,
+                      timestamp: res.timestamp,
+                      nonceStr: res.nonceStr,
+                      signature: res.signature,
+                      jsApiList: [
+                          'onMenuShareTimeline',
+                          'onMenuShareAppMessage',
+                          'onMenuShareQQ',
+                          'onMenuShareWeibo',
+                          'onMenuShareQZone',
+                          // 'setNavigationBarColor',
+                          'setBounceBackground'
+                      ]
+                  });
+                  wx.ready(function () {
+                      pushshare();
 
+                  });
+                  wx.error(function () {
+                      console.log('config error');
+                  });
+              });
+          }
+          function pushshare() {
+              var option = {
+                  imgUrl: "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=4173425533,1640870677&fm=27&gp=0.jpg", // 分享图标
+                  //type: '', // 分享类型,music、video或link，不填默认为link
+                  //dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                  title: "京乐推",
+                  desc: "京东爆品分享，优惠券折扣",
+                  link: "http://wx.microcodor.com/index/index/main",
+                  success: function () {
+                      console.log('分享成功');
+                  },
+                  cancel: function () {
+                      console.log('分享失败');
+                  }
+              };
+              wx.onMenuShareAppMessage(option);
+              wx.onMenuShareTimeline(option);
+              console.log("share-main")
+          }
       });
   </script>
-
-            <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
     <script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
-  <script src="__STATIC__/js/example.js"></script>
-
-
   </body>
 </html>
