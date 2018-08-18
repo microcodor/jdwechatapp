@@ -27,7 +27,6 @@ class Index extends Controller
      */
     //snsapi_userinfo snsapi_base
     public function  main(){
-        //header('Location:http://baidu.com');
         $wechatUtil = new WechatUtil();
         //snsapi_base   snsapi_userinfo
         $wechatUtil->web_auth("snsapi_userinfo",
@@ -48,7 +47,6 @@ class Index extends Controller
      */
     //snsapi_userinfo snsapi_base
     public function  union(){
-        //header('Location:http://baidu.com');
         $wechatUtil = new WechatUtil();
         //snsapi_base   snsapi_userinfo
         $wechatUtil->web_auth("snsapi_userinfo",
@@ -71,7 +69,6 @@ class Index extends Controller
      */
     //snsapi_userinfo snsapi_base
     public function  switchlink(){
-        //header('Location:http://baidu.com');
         $wechatUtil = new WechatUtil();
         //snsapi_base   snsapi_userinfo
         $wechatUtil->web_auth("snsapi_userinfo",
@@ -133,6 +130,23 @@ class Index extends Controller
             header('Location:'.$jumpurl);
             exit();
         }
+    }
+    /**
+     * 详情页授权入口
+     * http://wx.microcodor.com/index/index/authDetail
+     */
+    //snsapi_userinfo snsapi_base
+    public function  authDetail(){
+        $wechatUtil = new WechatUtil();
+        if (isset($_GET['id'])){
+            //snsapi_base   snsapi_userinfo
+            $wechatUtil->web_auth("snsapi_userinfo",
+                "http://wx.microcodor.com/wechat/index/auth_callback","http://wx.microcodor.com/index/index/detail?id=".$_GET['id']);
+        }else{
+            $wechatUtil->web_auth("snsapi_userinfo",
+                "http://wx.microcodor.com/wechat/index/auth_callback","http://wx.microcodor.com/index");
+        }
+        exit();
     }
     /**
      * 详情页

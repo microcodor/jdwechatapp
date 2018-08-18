@@ -303,7 +303,7 @@ $(function () {
                 //dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
                 title: title,
                 desc: title,
-                link: "http://wx.microcodor.com/index/index/detail?id="+id,
+                link: "http://wx.microcodor.com/index/index/authDetail?id="+id,
                 success: function () {
                     console.log('分享成功');
                 },
