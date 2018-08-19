@@ -490,7 +490,7 @@
                           '                      </div>\n' +
                           '\n' +
                           '                      <div class="weui-cell__ft">\n' +
-                          '                          <div skuId="'+obj.skuId+'" class="weui-btn-collect"><img src="__STATIC__/images/icon_collect.png" class="img-collect"><div class="weui-btn-font">收藏</div></div>\n' +
+                          '                          <div skuId="'+obj.skuId+'" class="weui-btn-collect"><img src="__STATIC__/images/icon_collect.png" class="img-collect"><div class="weui-btn-font">原始文案</div></div>\n' +
                           '                          <div class="line-view"></div>\n' +
                           '                          <div skuId="'+obj.skuId+'" class="weui-btn_push"><img src="__STATIC__/images/icon_wechat.png" class="img-collect"><div class="weui-btn-font">一键推广</div></div>\n' +
                           '                      </div>\n' +
@@ -583,25 +583,25 @@
               var val=$(this).attr("skuId");
               //alert("button click:"+val);
               ///showLoading();
-              $(this).children(".img-collect").attr("src","__STATIC__/images/icon_collect_pressed.png");
-              $(this).children(".weui-btn-font").html("已收藏");
-              // $.ajax({
-              //     type: "GET",
-              //     url: "http://wx.microcodor.com/index/index/push",
-              //     data: {id:val},
-              //     dataType: "json",
-              //     success: function(data){
-              //         console.log(data);
-              //         hideLoading();
-              //         if (data.result){
-              //             showToast();
-              //         }
-              //     },
-              //     error: function () {
-              //         hideLoading();
-              //
-              //     }
-              // });
+              //$(this).children(".img-collect").attr("src","__STATIC__/images/icon_collect_pressed.png");
+              //$(this).children(".weui-btn-font").html("已收藏");
+              $.ajax({
+                  type: "GET",
+                  url: "http://wx.microcodor.com/index/index/push",
+                  data: {id:val},
+                  dataType: "json",
+                  success: function(data){
+                      console.log(data);
+                      hideLoading();
+                      if (data.result){
+                          showToast();
+                      }
+                  },
+                  error: function () {
+                      hideLoading();
+
+                  }
+              });
 
               e.preventDefault();
           })
