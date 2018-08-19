@@ -27,17 +27,31 @@ class Index extends Controller
         echo 'aaaaa';
     }
     //优惠商品
+//    public function couponGoods(){
+//        $from = 0;
+//        $pageSize = 10;
+//        if (isset($_GET['from'])){
+//            $from = $_GET['from'];
+//        }
+//        if (isset($_GET['pageSize'])){
+//            $pageSize = $_GET['pageSize'];
+//        }
+//        $jingdongutil = new JingDongBeeApi();
+//        $res = $jingdongutil->get_coupon_goods($from, $pageSize);
+//        return json($res);
+//    }
+    //优惠券商品
     public function couponGoods(){
         $from = 0;
         $pageSize = 10;
-        if (isset($_GET['from'])){
-            $from = $_GET['from'];
+        if (isset($_GET['pageIndex'])){
+            $from = $_GET['pageIndex'];
         }
         if (isset($_GET['pageSize'])){
             $pageSize = $_GET['pageSize'];
         }
         $jingdongutil = new JingDongBeeApi();
-        $res = $jingdongutil->get_coupon_goods($from, $pageSize);
+        $res = $jingdongutil->getCouponSkuList($from, $pageSize);
         return json($res);
     }
     //商品信息
