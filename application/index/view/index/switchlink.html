@@ -82,23 +82,24 @@
 </div>
 
 <script type="text/javascript">
-    var defaultText = ''
-    var clipboard = new ClipboardJS('#btn-copy', {
-        text: function() {
-            if (defaultText){
-                return defaultText;
-            }
-            var val = $('#short-info').html();
-            return val;
-        }
-    });
+    var defaultText = '';
+    // var clipboard = new ClipboardJS('#btn-copy', {
+    //     text: function() {
+    //         if (defaultText){
+    //             return defaultText;
+    //         }
+    //         var val = $('#short-info').html();
+    //         return val;
+    //     }
+    // });
+    var clipboard = new ClipboardJS('#btn-copy');
 
     clipboard.on('success', function(e) {
-        console.log(e);
+        console.log('success',e);
     });
 
     clipboard.on('error', function(e) {
-        console.log(e);
+        console.log('error', e);
     });
     $(function(){
 
@@ -114,6 +115,7 @@
                     showToast();
                     if (data) {
                         defaultText = data;
+                        $("#btn-copy").attr("data-clipboard-text", data);
                         // var reg = new RegExp("\n","g");
                         // var str=data.replace(reg,'<br/>');
                         var str = data.replace(/\\n/g, "<br/>");
