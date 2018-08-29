@@ -13,7 +13,7 @@
     <script type="text/javascript" src="__STATIC__/js/iscroll-probe.js"></script>
     <script type="text/javascript" src="__STATIC__/js/demoUtils.js"></script>
     <script type="text/javascript" src="__STATIC__/js/zepto.min.js"></script>
-    <script type="text/javascript" src="__STATIC__/js/clipboard.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/clipboard-polyfill.promise.js"></script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -60,7 +60,7 @@
         </div>
     </div>
     <div class="weui-cells__title">转链结果</div>
-    <div id="short-info"></div>
+    <pre id="short-info"></pre>
     <a href="javascript:;" id="btn-copy" class="weui-btn weui-btn_warn" style="display: none;">一键复制</a>
 
 <!--BEGIN toast-->
@@ -92,35 +92,41 @@
     //         return val;
     //     }
     // });
-    var clipboard = new ClipboardJS('#btn-copy');
-
-    clipboard.on('success', function(e) {
-        console.log('success',e);
-    });
-
-    clipboard.on('error', function(e) {
-        console.log('error', e);
-    });
+    // var clipboard = new ClipboardJS('#btn-copy');
+    //
+    // clipboard.on('success', function(e) {
+    //     console.log('success',e);
+    // });
+    //
+    // clipboard.on('error', function(e) {
+    //     console.log('error', e);
+    // });
     $(function(){
 
         function switchUrl(shortInfo){
             //http://wx.microcodor.com/index/index/switchUrl
+            //http://localhost/jdwechatapp/public/index/index/switchUrl
             $.ajax({
                 url: 'http://wx.microcodor.com/index/index/switchUrl',
                 data:{'shortUrl': shortInfo},
                 type:'GET',
-                dataType:'text',
+                dataType:'json',
                 success: function(data) {
                     console.log('data:' + data)
                     showToast();
-                    if (data) {
+                    if (data&&data.result) {
                         defaultText = data;
-                        $("#btn-copy").attr("data-clipboard-text", data);
+                        //$("#btn-copy").attr("data-clipboard-text", data);
                         // var reg = new RegExp("\n","g");
                         // var str=data.replace(reg,'<br/>');
-                        var str = data.replace(/\\n/g, "<br/>");
-                        console.log('str:' + str)
-                        $('#short-info').html(str);
+                        //var str = data.result.replace(/\\n/g, "<br/>");
+                        console.log('result:' + data.result)
+
+                        $('#short-info').html(data.result);
+                        $('#btn-copy').show();
+                    }else {
+                        defaultText = shortInfo;
+                        $('#short-info').html(shortInfo);
                         $('#btn-copy').show();
                     }
                 },
@@ -130,6 +136,21 @@
 
             });
         }
+        $('#btn-copy').on('click', function () {
+            //var newStr = JSON.parse(defaultText);
+            var text = '';
+            if (defaultText&&defaultText.result){
+                text = defaultText.result;
+            }else {
+                text = defaultText;
+            }
+            console.log('text:' + text);
+            clipboard.writeText(text).then(function(){
+                showToast();
+            }, function(err){
+                console.log("err:",err);
+            });
+        })
         $('#showTooltips').on('click', function(){
             defaultText = '';
             $('#short-info').html('');

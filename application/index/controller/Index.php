@@ -113,11 +113,13 @@ class Index extends Controller
 
                 if (isset($realurl)){
                     $newstr = str_replace($shorturl, $realurl, $str);
-                    return $newstr;
+                    //return $newstr;
+                    return json(array('result'=>$newstr));
                 }
             }
         }
-        return null;
+        //return null;
+        return json(array('result'=>false));
 
     }
     /**
