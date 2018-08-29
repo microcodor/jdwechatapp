@@ -82,8 +82,12 @@
 </div>
 
 <script type="text/javascript">
+    var defaultText = ''
     var clipboard = new ClipboardJS('#btn-copy', {
         text: function() {
+            if (defaultText){
+                return defaultText;
+            }
             var val = $('#short-info').html();
             return val;
         }
@@ -99,8 +103,9 @@
     $(function(){
 
         function switchUrl(shortInfo){
+            //http://wx.microcodor.com/index/index/switchUrl
             $.ajax({
-                url: 'http://wx.microcodor.com/index/index/switchUrl',
+                url: 'http://localhost/jdwechatapp/public/index/index/switchUrl',
                 data:{'shortUrl': shortInfo},
                 type:'GET',
                 dataType:'text',
@@ -108,6 +113,7 @@
                     console.log('data:' + data)
                     showToast();
                     if (data) {
+                        defaultText = data;
                         // var reg = new RegExp("\n","g");
                         // var str=data.replace(reg,'<br/>');
                         var str = data.replace(/\\n/g, "<br/>");
@@ -123,6 +129,9 @@
             });
         }
         $('#showTooltips').on('click', function(){
+            defaultText = '';
+            $('#short-info').html('');
+            $('#btn-copy').hide();
             var val=$('.weui-textarea').val();
             console.log("click:"+val);
             switchUrl(val);
