@@ -128,7 +128,9 @@
               background-color: #fafafa;
               font-size: 14px;
           }
-
+          #wrapper {
+              margin-top: 44px !important;
+          }
           #wrapper p{position:absolute; text-align:center; height:3rem; line-height:3rem; color:red; width:100%;}
 
           #wrapper p.p-2{bottom:0;}
@@ -271,76 +273,108 @@
               background: #f3f3f3;
               align-self: center;
           }
+          .view-top {
+              background: #f1f4f6  !important;
+              z-index: 500;
+              top: 0;
+              width: 100%;
+          }
+          .page__bd{
+              background: red  !important;
+          }
+          .weui-search-bar {
+              z-index: 500;
+          }
+          .weui-navbar{
+              position: relative   !important;
+          }
+
       </style>
   </head>
   <body ontouchstart  onload="loaded()">
-  <div class="weui-navbar">
-      <div href="#tab1" class="weui-navbar__item weui-bar__item_on">
-          按日期
-      </div>
-      <div href="#tab2" class="weui-navbar__item">
-          按佣金
-      </div>
-      <div href="#tab3" class="weui-navbar__item">
-          按价格
+  <div class="view-top">
+      <!--<div class="page__search">-->
+          <!--<a href="javascript:;" class="weui-btn weui-btn_primary">点击展现searchBar</a>-->
+          <div class="weui-search-bar" id="searchBar">
+              <form class="weui-search-bar__form"  action="javascript:search();">
+                  <div class="weui-search-bar__box">
+                      <i class="weui-icon-search"></i>
+                      <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required/>
+                      <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+                  </div>
+                  <label class="weui-search-bar__label" id="searchText">
+                      <i class="weui-icon-search"></i>
+                      <span>搜索</span>
+                  </label>
+              </form>
+              <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+          </div>
+      <!--</div>-->
+
+      <div class="weui-navbar">
+          <div href="#tab1" class="weui-navbar__item weui-bar__item_on">
+              按日期
+          </div>
+          <div href="#tab2" class="weui-navbar__item">
+              按佣金
+          </div>
+          <div href="#tab3" class="weui-navbar__item">
+              按价格
+          </div>
       </div>
   </div>
 
-
-
   <!--  </div> -->
-  <div class="content">
-      <div id="wrapper" style="display: block;">
-          <div id="scroller">
-              <!-- <ul>
-                  <li id="-1">
-                      <div class="item">
-                          <img src="" class="item-img">
+  <div id="wrapper" style="display: block;">
+      <div id="scroller">
+          <!-- <ul>
+              <li id="-1">
+                  <div class="item">
+                      <img src="" class="item-img">
 
 
-                      </div>
-                  tieleeeeeeeeee:<button id="-1" style="">button</button>
+                  </div>
+              tieleeeeeeeeee:<button id="-1" style="">button</button>
 
 
-                  </li>
-              </ul> -->
-              <div class="view-list">
-                  <div class="view-item">
-                      <div class="view-info">
-                          <img src="https://img14.360buyimg.com/n0/jfs/t21235/25/2215358474/458789/b2b86e63/5b4c445dNf383b504.jpg" class="image-cover" alt="">
-                          <div class="view-right">
-                              <div class="jd-title">花花公子正品，有防伪标签花花公子正品有防伪标签花花公子正品，有防伪标签花花公子正品，有防伪标签</div>
-                              <div class="jd-bottom">
-                                  <div class="jd-sell-price">
-                                      <div class="jd-coupon-price">券后价：¥ 89</div>
-                                      <div class="jd-price">¥ 198</div>
-                                      <div class="jd-time">截止：08.23</div>
-                                  </div>
-                                  <div class="jd-yj-price">
-                                      <img src="__STATIC__/images/icon_money.png" class="img-money">
-                                      <div class="jd-yj-title">佣金：</div>
-                                      <div class="jd-yj-com-num">¥ 89</div>
-                                      <div class="jd-commissionshare-title">占比：</div>
-                                      <div class="jd-commissionshare-num">50%</div>
-                                  </div>
+              </li>
+          </ul> -->
+          <div class="view-list">
+              <div class="view-item">
+                  <div class="view-info">
+                      <img src="https://img14.360buyimg.com/n0/jfs/t21235/25/2215358474/458789/b2b86e63/5b4c445dNf383b504.jpg" class="image-cover" alt="">
+                      <div class="view-right">
+                          <div class="jd-title">花花公子正品，有防伪标签花花公子正品有防伪标签花花公子正品，有防伪标签花花公子正品，有防伪标签</div>
+                          <div class="jd-bottom">
+                              <div class="jd-sell-price">
+                                  <div class="jd-coupon-price">券后价：¥ 89</div>
+                                  <div class="jd-price">¥ 198</div>
+                                  <div class="jd-time">截止：08.23</div>
                               </div>
-
+                              <div class="jd-yj-price">
+                                  <img src="__STATIC__/images/icon_money.png" class="img-money">
+                                  <div class="jd-yj-title">佣金：</div>
+                                  <div class="jd-yj-com-num">¥ 89</div>
+                                  <div class="jd-commissionshare-title">占比：</div>
+                                  <div class="jd-commissionshare-num">50%</div>
+                              </div>
                           </div>
-                      </div>
 
-                      <div class="weui-cell__ft">
-                          <div skuId="0" class="weui-btn-collect"><img src="__STATIC__/images/icon_collect.png" class="img-collect"><div class="weui-btn-font">收藏</div></div>
-                          <div class="line-view"></div>
-                          <div skuId="1" class="weui-btn_push"><img src="__STATIC__/images/icon_wechat.png" class="img-collect"><div class="weui-btn-font">一键推广</div></div>
                       </div>
+                  </div>
+
+                  <div class="weui-cell__ft">
+                      <div skuId="0" class="weui-btn-collect"><img src="__STATIC__/images/icon_collect.png" class="img-collect"><div class="weui-btn-font">收藏</div></div>
+                      <div class="line-view"></div>
+                      <div skuId="1" class="weui-btn_push"><img src="__STATIC__/images/icon_wechat.png" class="img-collect"><div class="weui-btn-font">一键推广</div></div>
                   </div>
               </div>
           </div>
-          <p class="p-1">下拉刷新</p>
-          <p class="p-2">上拉加载</p>
       </div>
-
+      <p class="p-1">下拉刷新</p>
+      <p class="p-2">上拉加载</p>
   </div>
+
   <!--BEGIN toast-->
   <div id="toast" style="display: none;">
       <div class="weui-mask_transparent"></div>
@@ -368,8 +402,56 @@
           capture: false,
           passive: false
       } : false);
+      function search() {
+          var value = document.getElementById('searchInput').value;
+          alert(value);
+      }
 
       $(function(){
+          var $searchBar = $('#searchBar'),
+              $searchResult = $('#searchResult'),
+              $searchText = $('#searchText'),
+              $searchInput = $('#searchInput'),
+              $searchClear = $('#searchClear'),
+              $searchCancel = $('#searchCancel');
+
+          function hideSearchResult(){
+              $searchResult.hide();
+              $searchInput.val('');
+          }
+          function cancelSearch(){
+              hideSearchResult();
+              $searchBar.removeClass('weui-search-bar_focusing');
+              $searchText.show();
+          }
+
+          $searchText.on('click', function(){
+              $searchBar.addClass('weui-search-bar_focusing');
+              $searchInput.focus();
+          });
+          $searchInput
+              .on('blur', function () {
+                  if(!this.value.length) cancelSearch();
+              })
+              .on('input', function(){
+                  if(this.value.length) {
+                      $searchResult.show();
+                  } else {
+                      $searchResult.hide();
+                  }
+              })
+          ;
+          $searchClear.on('click', function(){
+              hideSearchResult();
+              $searchInput.focus();
+          });
+          $searchCancel.on('click', function(){
+              cancelSearch();
+              $searchInput.blur();
+          });
+
+
+
           var tabIndex = "#tab1";
           var preSort1 = 'desc';
           var preSort2 = 'desc';
@@ -452,7 +534,7 @@
               }
               //http://localhost/jdwechatapp/public/unionjd/index/couponGoods
               //http://wx.microcodor.com/unionjd/index/couponGoods
-              $.getJSON('http://wx.microcodor.com/unionjd/index/couponGoods', {'pageIndex':curPage*pageSize, 'pageSize': pageSize}, function(data) {
+              $.getJSON('http://localhost/jdwechatapp/public/unionjd/index/couponGoods', {'pageIndex':curPage*pageSize, 'pageSize': pageSize}, function(data) {
                   console.log('tabIndex:'+index+',sortIndex:'+sortIndex+',curPage:'+curPage+',pageSize:'+ pageSize);
                   if (curTabIndex!==tabIndex) {
                       getdata(tabIndex,sortIndex,0,size);
