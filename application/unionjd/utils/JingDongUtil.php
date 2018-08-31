@@ -10,8 +10,12 @@ namespace app\unionjd\utils;
 use JD\JdClient;
 use JD\request\UnionThemeGoodsServiceQueryCouponGoodsRequest;
 
-define('APP_KEY','39ADDBACC0D5E0CFD90892D8D45FE3C4');
-define('APP_SECRET','d751c9481d524133a07167632b6624e4');
+//define('APP_KEY','39ADDBACC0D5E0CFD90892D8D45FE3C4');
+//define('APP_SECRET','d751c9481d524133a07167632b6624e4');
+///define('REDIRECT_URI', 'http://wx.microcodor.com/unionjd/index/oauth2');
+///define('JD_TOKEN', '7c54f31a-6f9e-4d12-b3bd-72dd89cd01c6');
+define('APP_KEY','9AB172BE4A1690C0F94ED75291C696EB');
+define('APP_SECRET','01f4f550efbb45099315604453f9ef82');
 define('REDIRECT_URI', 'http://wx.microcodor.com/unionjd/index/oauth2');
 define('JD_TOKEN', '7c54f31a-6f9e-4d12-b3bd-72dd89cd01c6');
 class JingDongUtil{
